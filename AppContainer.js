@@ -104,9 +104,16 @@ const NavLinkContent = ({
 };
 
 export const AppContainerInternal = ({ logo, apps, extras, containerClassName, children }) => {
-  const allApps = [...apps?.props?.children, ...extras?.props?.children].filter(
-    e => !!e && !!e.props.component
-  );
+  const allApps = [ apps, extras ].reduce((apps, input) => {
+    if (input?.props?.children) {
+      if (Array.isArray(input.props.children)) {
+        input.props.children.forEach(a => apps.push(a));
+      } else {
+        apps.push(input.props.children);
+      }
+    }
+    return apps;
+  }, []).filter(e => !!e.props.component);
   const defaultApp = allApps.find(a => a.props.default) || allApps[0];
 
   const location = useLocation();

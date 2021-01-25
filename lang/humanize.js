@@ -38,3 +38,26 @@ export function pluralize(count, what, includeCount = true) {
 export function finishingPeriod(string) {
   return string + (string.endsWith(".") ? "" : ".");
 }
+
+const decimalIntegerSuffixes = [ "", "k", "M", "G" ];
+export const humanizeCount = function (count) {
+  if (isNaN(count) || !isFinite(count) || count === 0) {
+    return count;
+  }
+
+  const negative = count < 0;
+  count = Math.abs(Math.round(count));
+
+  // How many digits to keep at most
+  const digits = 3;
+
+  let divided = count;
+  let index = 0;
+  while (divided >= 1000 && index < decimalIntegerSuffixes.length) {
+    divided /= 1000.0;
+    index++;
+  }
+  let formatted = maxDigits(divided, digits);
+
+  return (negative ? "-" : "") + formatted + decimalIntegerSuffixes[index];
+};
