@@ -39,7 +39,7 @@ export function finishingPeriod(string) {
   return string + (string.endsWith(".") ? "" : ".");
 }
 
-const decimalIntegerSuffixes = [ "", "k", "M", "G" ];
+const decimalIntegerSuffixes = ["", "k", "M", "G"];
 export const humanizeCount = function (count) {
   if (isNaN(count) || !isFinite(count) || count === 0) {
     return count;

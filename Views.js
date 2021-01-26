@@ -63,12 +63,12 @@ export const Tool = ({ tool, visible, props }) => {
 };
 
 const Switch = props => {
-  const [ initialized, setInitialized ] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   useEffect(() => {
     if (props.visible) {
       setInitialized(true);
     }
-  }, [ props.visible ]);
+  }, [props.visible]);
 
   if (!initialized) {
     return null;
@@ -91,10 +91,11 @@ Switch.propTypes = {
   createElement: PropTypes.func.isRequired
 };
 
-export const flattenViews = views => views.reduce((map, group) => {
-  Object.assign(map, group.views);
-  return map;
-}, {});
+export const flattenViews = views =>
+  views.reduce((map, group) => {
+    Object.assign(map, group.views);
+    return map;
+  }, {});
 
 export const Views = ({
   views,
@@ -131,7 +132,7 @@ export const Views = ({
         </PointedTabs>
         {viewKeys
           .filter(v => allViews[v].tools && allViews[v].tools.length > 0)
-          .reduce(function(tools, v) {
+          .reduce(function (tools, v) {
             allViews[v].tools.forEach(t => {
               const key = v + "." + t.id;
               tools.push(
