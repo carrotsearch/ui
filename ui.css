@@ -93,3 +93,7 @@ code {
 button.bp3-disabled {
   cursor: pointer !important;
 }
+
+.bp3-menu-item > .svg-inline--fa {
+  margin-top: 0.25em;
+}
