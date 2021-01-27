@@ -4,7 +4,7 @@ import "./Logo.css";
 
 export const Lingo4GLogo = () => (
   <svg
-    className="Logo"
+    className="Lingo4GLogo Logo"
     viewBox="0 0 116.97 131.02"
     xmlns="http://www.w3.org/2000/svg"
   >
