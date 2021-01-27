@@ -1,0 +1,8 @@
+.TextAreaWithCopyToClipboard .bp3-label {
+  position: relative;
+}
+.TextAreaWithCopyToClipboard .bp3-label > button {
+  position: absolute;
+  right: 0;
+  top: -0.15em;
+}
