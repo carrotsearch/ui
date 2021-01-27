@@ -47,6 +47,7 @@ export const AppMainButton = ({ icon, children, ...props }) => {
     <Button
       className="AppMainButton"
       large={true}
+      intent="primary"
       icon={<FontAwesomeIcon icon={icon} />}
       {...props}
     >
