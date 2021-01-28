@@ -54,12 +54,6 @@
 .AppMain {
   display: grid;
   height: 100vh;
-
-  grid-template-columns: auto 24em;
-  grid-template-rows: auto 1fr;
-  grid-template-areas:
-    "stats stats"
-    "clusters docs";
 }
 
 .AppMain .stats {
