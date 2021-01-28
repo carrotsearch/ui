@@ -76,6 +76,6 @@
   position: relative;
 }
 
-.WorkbenchMain .AppMainPanel .ViewsContent {
-  padding-bottom: calc(var(--leading));
+.AppWelcome {
+  margin-top: 25%;
 }
