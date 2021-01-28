@@ -24,7 +24,7 @@
   height: 100%;
 }
 
-.Views button {
+.Views .view-tool-trigger button {
   min-height: 26px;
   min-width: 26px;
   color: var(--text-color-lighter) !important;
