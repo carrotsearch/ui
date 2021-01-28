@@ -15,6 +15,7 @@ import {
 import { PointedTabs } from "./PointedTabs.js";
 
 import "./Views.css";
+import { ToolPopover } from "./ToolPopover.js";
 
 const ShowHide = props => {
   return (
@@ -31,14 +32,7 @@ const ShowHide = props => {
 export const Tool = ({ tool, visible, props }) => {
   if (tool.icon) {
     return (
-      <Popover
-        className={Classes.FIXED}
-        position={Position.BOTTOM_RIGHT}
-        autoFocus={true}
-        popoverClassName="view-tool-content"
-        disabled={!visible}
-        boundary="viewport"
-      >
+      <ToolPopover className={Classes.FIXED} disabled={!visible}>
         <ShowHide visible={visible} className="view-tool-trigger">
           <Button
             icon={<FontAwesomeIcon icon={tool.icon} />}
@@ -47,7 +41,7 @@ export const Tool = ({ tool, visible, props }) => {
           />
         </ShowHide>
         {tool.createContentElement(props)}
-      </Popover>
+      </ToolPopover>
     );
   } else {
     return (

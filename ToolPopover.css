@@ -1,0 +1,17 @@
+.ToolPopover .bp3-popover-content {
+  padding: var(--leading);
+}
+
+.ToolPopover h4 {
+  border-bottom: 1px solid var(--hr-color);
+  padding-bottom: var(--leading);
+  margin-bottom: var(--leading);
+}
+
+.ToolPopover *:last-child {
+  margin-bottom: 0;
+}
+
+.ToolPopover.bp3-popover-content-sizing .bp3-popover-content {
+  max-width: none;
+}

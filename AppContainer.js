@@ -24,11 +24,13 @@ import {
   PopoverPosition
 } from "@blueprintjs/core";
 
+
 import { faFrown } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { errors } from "./store/errors.js";
 import { ThemeSwitch } from "./ThemeSwitch.js";
+import { ToolPopover } from "./ToolPopover.js";
 
 const AppLink = ({ to, title, children, icon }) => {
   const [open, setOpen] = useState(false);
@@ -86,20 +88,20 @@ const NavLinkContent = ({
   };
 
   return (
-    <Popover
-      popoverClassName="NavPopover"
+    <ToolPopover
       position={PopoverPosition.RIGHT}
       interactionKind={PopoverInteractionKind.HOVER}
       onInteraction={handlePopoverInteraction}
       hoverOpenDelay={450}
       isOpen={open}
+      popoverClassName="NavPopover"
     >
       <FontAwesomeIcon icon={icon} size="2x" />
-      <div className="NavPopoverContent">
+      <div>
         <h3>{title}</h3>
         {children}
       </div>
-    </Popover>
+    </ToolPopover>
   );
 };
 
