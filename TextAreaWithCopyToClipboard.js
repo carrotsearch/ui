@@ -9,7 +9,10 @@ const LabelWithCopyToClipboard = props => {
   return (
     <>
       {props.label}
-      <CopyToClipboard contentProvider={props.contentProvider} buttonText="Copy" />
+      <CopyToClipboard
+        contentProvider={props.contentProvider}
+        buttonText="Copy"
+      />
     </>
   );
 };
