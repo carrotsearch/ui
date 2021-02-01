@@ -58,6 +58,7 @@
 
 .AppMain .stats {
   grid-area: stats;
+  display: flex;
   overflow-x: hidden;
   padding-top: var(--leading);
   padding-left: var(--leading);
