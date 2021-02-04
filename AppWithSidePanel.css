@@ -21,6 +21,10 @@
   top: 0;
   background-color: var(--background-color-side);
   z-index: 1;
+}
+
+.AppSideFixed,
+.AppSideMain {
   padding: var(--leading);
 }
 
@@ -43,10 +47,6 @@
   margin-right: auto;
 }
 
-.AppSide .Settings,
-.AppSide .Deferred {
-  padding: var(--leading);
-}
 .AppSide .Deferred {
   padding-top: 0;
 }
