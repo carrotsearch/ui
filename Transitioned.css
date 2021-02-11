@@ -1,0 +1,8 @@
+.Transitioned {
+  opacity: 0.0;
+  transition: opacity 0.5s;
+}
+
+.Transitioned.visible {
+  opacity: 1.0;
+}
