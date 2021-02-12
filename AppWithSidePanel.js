@@ -20,9 +20,7 @@ const AppSide = ({ logo, button, sideFixed, sideMain }) => {
         {sideFixed}
       </div>
 
-      <div className="AppSideMain">
-        {sideMain}
-      </div>
+      <div className="AppSideMain">{sideMain}</div>
     </div>
   );
 };
