@@ -1,6 +1,11 @@
 .Stats {
 }
 
+.Stats.WithDivider {
+  padding-left: 1em;
+  border-left: 1px solid var(--border-color);
+}
+
 .Stat {
   display: inline-block;
   text-align: center;
