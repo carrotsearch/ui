@@ -59,10 +59,12 @@ const useNumberSettingHeuristics = (setting, set, inputStep, initialValue) => {
  * for editing parameters for which minimum or maximum value is not specified.
  */
 export const NumericSettingSimple = view(({ setting, get, set }) => {
-  const { label, description, min, max, integer } = setting;
+  const { label, description, min, max, step, integer } = setting;
 
   const value = get(setting);
-  const inputStep = clampWhenInteger(ceil125(value / 100), integer);
+
+  const inputStepRaw = step !== undefined ? step : range / 100;
+  const inputStep = clampWhenInteger(ceil125(inputStepRaw), integer);
 
   const {
     stringValue,
@@ -107,18 +109,23 @@ export const NumericSettingSimple = view(({ setting, get, set }) => {
  * including automatic value step computation.
  */
 export const NumericSetting = view(({ setting, get, set }) => {
-  const { label, description, min, max, integer } = setting;
+  const { label, description, min, max, step, integer, onRelease } = setting;
   const value = get(setting);
 
   const range = max - min;
 
   // Compute the value step to be a multiple of 1, 2 or 5.
-  const inputStep = clampWhenInteger(ceil125(range / 100), integer);
-  const sliderStep = clampWhenInteger(ceil125(range / 20), integer);
+  const inputStepRaw = step !== undefined ? step : range / 100;
+  const sliderStepRaw = step !== undefined ? step : range / 20;
+
+  const inputStep = clampWhenInteger(ceil125(inputStepRaw), integer);
+  const sliderStep = clampWhenInteger(ceil125(sliderStepRaw), integer);
 
   // Compute the number of decimal places we need for display.
   const boundsLabelPrecision = Math.max(decimalPlaces(min), decimalPlaces(max));
   const valueLabelPrecision = decimalPlaces(sliderStep);
+
+  const doOnRelease = () => { onRelease && onRelease() };
 
   // Render bounds without decimal places, if possible.
   const sliderLabelRenderer = v =>
@@ -133,8 +140,10 @@ export const NumericSetting = view(({ setting, get, set }) => {
   } = useNumberSettingHeuristics(setting, set, inputStep, value);
 
   // Parse string into a float when the focus leaves the input box.
-  const commitStringValue = () =>
+  const commitStringValue = () => {
     onNumberValueChange(parseFloat(stringValue), 1);
+    doOnRelease();
+  };
 
   const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
   const onSliderValueChange = v => onNumberValueChange(v, sliderStep);
@@ -160,6 +169,7 @@ export const NumericSetting = view(({ setting, get, set }) => {
         <Slider
           value={v}
           onChange={onSliderValueChange}
+          onRelease={doOnRelease}
           fill={false}
           min={min}
           max={max}
