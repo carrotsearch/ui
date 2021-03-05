@@ -15,7 +15,7 @@ export const BooleanSetting = view(({ setting, get, set }) => {
         inline={true}
         onChange={e => set(setting, e.target.checked)}
       />
-      { description ? <DescriptionPopover description={description} /> : null}
+      {description ? <DescriptionPopover description={description} /> : null}
     </FormGroup>
   );
 });

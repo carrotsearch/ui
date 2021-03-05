@@ -125,7 +125,9 @@ export const NumericSetting = view(({ setting, get, set }) => {
   const boundsLabelPrecision = Math.max(decimalPlaces(min), decimalPlaces(max));
   const valueLabelPrecision = decimalPlaces(sliderStep);
 
-  const doOnRelease = () => { onRelease && onRelease() };
+  const doOnRelease = () => {
+    onRelease && onRelease();
+  };
 
   // Render bounds without decimal places, if possible.
   const sliderLabelRenderer = v =>
