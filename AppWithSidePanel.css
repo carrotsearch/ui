@@ -20,7 +20,7 @@
   position: sticky;
   top: 0;
   background-color: var(--background-color-side);
-  z-index: 1;
+  z-index: 3;
 }
 
 .AppSideFixed,

@@ -75,7 +75,7 @@ const Switch = props => {
         position: "relative"
       }}
     >
-      {props.createElement(props.visible)}
+      {props.createElement(props.visible, props.props)}
     </div>
   );
 };
@@ -149,6 +149,7 @@ export const Views = ({
               key={v}
               visible={v === activeView}
               createElement={allViews[v].createContentElement}
+              props={props}
             />
           );
         })}
