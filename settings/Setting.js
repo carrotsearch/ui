@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import "./Setting.css";
 
-import { FormGroup, Popover, PopoverPosition } from "@blueprintjs/core";
+import { FormGroup } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
+import { DescriptionPopover } from "../DescriptionPopover.js";
 
 export const isSettingVisible = s => !s.visible || s.visible();
 
@@ -13,7 +14,7 @@ export const LabelWithHelp = ({ label, description }) => {
     return (
       <div className="LabelWithHelp">
         {label}
-        <DescriptionPopover description={description} />
+        <SettingDescriptionPopover description={description} />
       </div>
     );
   } else {
@@ -21,41 +22,11 @@ export const LabelWithHelp = ({ label, description }) => {
   }
 };
 
-export const DescriptionPopover = ({ description }) => {
-  const [open, setOpen] = useState(false);
-  useEffect(() => {
-    const listener = e => {
-      if (e.keyCode === 27) {
-        setOpen(false);
-      }
-    };
-    document.body.addEventListener("keydown", listener);
-    return () => {
-      document.body.removeEventListener("keydown", listener);
-    };
-  }, []);
+export const SettingDescriptionPopover = ({ description }) => {
   return (
-    <Popover
-      content={<SettingDescription description={description} />}
-      position={PopoverPosition.RIGHT_BOTTOM}
-      canEscapeKeyClose={true}
-      isOpen={open}
-      onInteraction={setOpen}
-      boundary="viewport"
-    >
+    <DescriptionPopover description={description}>
       <FontAwesomeIcon className="HelpIcon" icon={faQuestionCircle} />
-    </Popover>
-  );
-};
-
-const SettingDescription = ({ description }) => {
-  return typeof description === "string" ? (
-    <div
-      className="SettingDescription"
-      dangerouslySetInnerHTML={{ __html: description }}
-    />
-  ) : (
-    <div className="SettingDescription">{description}</div>
+    </DescriptionPopover>
   );
 };
 

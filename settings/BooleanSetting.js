@@ -3,7 +3,7 @@ import "./BooleanSetting.css";
 
 import { Checkbox, FormGroup } from "@blueprintjs/core";
 import { view } from "@risingstack/react-easy-state";
-import { DescriptionPopover } from "./Setting.js";
+import { SettingDescriptionPopover } from "./Setting.js";
 
 export const BooleanSetting = view(({ setting, get, set }) => {
   const { description } = setting;
@@ -15,7 +15,9 @@ export const BooleanSetting = view(({ setting, get, set }) => {
         inline={true}
         onChange={e => set(setting, e.target.checked)}
       />
-      {description ? <DescriptionPopover description={description} /> : null}
+      {description ? (
+        <SettingDescriptionPopover description={description} />
+      ) : null}
     </FormGroup>
   );
 });
