@@ -32,7 +32,7 @@ const ShowHide = props => {
 export const Tool = ({ tool, visible, props }) => {
   if (tool.icon) {
     return (
-      <ToolPopover className={Classes.FIXED} disabled={!visible}>
+      <ToolPopover className={Classes.FIXED} disabled={!visible} position={tool.position}>
         <ShowHide visible={visible} className="view-tool-trigger">
           <Button
             icon={<FontAwesomeIcon icon={tool.icon} />}
