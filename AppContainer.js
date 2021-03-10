@@ -95,7 +95,11 @@ const NavLinkContent = ({
       isOpen={open}
       popoverClassName="NavPopover"
     >
-      <FontAwesomeIcon icon={icon} size="2x" />
+      {React.isValidElement(icon) ? (
+        icon
+      ) : (
+        <FontAwesomeIcon icon={icon} size="2x" />
+      )}
       <div>
         <h3>{title}</h3>
         {children}

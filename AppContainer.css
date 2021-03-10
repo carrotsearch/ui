@@ -23,6 +23,9 @@ nav .Logo {
   width: 2.5em;
   margin-bottom: 1.5em;
 }
+nav .NavLink .Logo {
+  margin-bottom: 0;
+}
 nav svg.Logo {
   fill: var(--nav-logo-color);
 }
