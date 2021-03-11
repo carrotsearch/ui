@@ -54,7 +54,7 @@ export const Tool = ({ tool, visible, props }) => {
         className={Classes.FIXED + " view-tool-trigger"}
         title={tool.title}
       >
-        {tool.createContentElement()}
+        {tool.createContentElement(props)}
       </ShowHide>
     );
   }
