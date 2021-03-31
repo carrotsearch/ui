@@ -121,3 +121,15 @@ nav .ThemeSwitch {
 main {
   position: relative;
 }
+
+.Welcome {
+  text-align: left;
+}
+
+.Welcome p {
+  width: 100%;
+}
+
+.Welcome li {
+  margin-bottom: var(--leading);
+}
