@@ -5,7 +5,7 @@ import { view } from "@risingstack/react-easy-state";
 import { TagInput } from "@blueprintjs/core";
 import { Setting } from "./Setting.js";
 
-export const StringArraySetting = view(({ setting, get, set }) => {
+export const StringArraySetting = view(({ setting, get, set, search }) => {
   const { label, description } = setting;
 
   return (
@@ -13,6 +13,8 @@ export const StringArraySetting = view(({ setting, get, set }) => {
       className="StringListSetting"
       label={label}
       description={description}
+      search={search}
+      labelSearchTarget={setting.labelSearchTarget}
     >
       <TagInput
         values={get(setting)}

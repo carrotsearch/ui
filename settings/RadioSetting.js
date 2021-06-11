@@ -6,11 +6,17 @@ import { Radio, RadioGroup } from "@blueprintjs/core";
 import { view } from "@risingstack/react-easy-state";
 import { LabelWithHelp, Setting } from "./Setting.js";
 
-export const RadioSetting = view(({ setting, get, set }) => {
+export const RadioSetting = view(({ setting, get, set, search }) => {
   const { label, description, options, inline } = setting;
 
   return (
-    <Setting className="RadioSetting" label={label} description={description}>
+    <Setting
+      className="RadioSetting"
+      label={label}
+      description={description}
+      search={search}
+      labelSearchTarget={setting.labelSearchTarget}
+    >
       <RadioGroup
         onChange={e => set(setting, e.target.value)}
         selectedValue={get(setting)}

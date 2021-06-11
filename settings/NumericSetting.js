@@ -58,7 +58,7 @@ const useNumberSettingHeuristics = (setting, set, inputStep, initialValue) => {
  * A setting for spinner-based editing of a numeric value. This variant is useful
  * for editing parameters for which minimum or maximum value is not specified.
  */
-export const NumericSettingSimple = view(({ setting, get, set }) => {
+export const NumericSettingSimple = view(({ setting, get, set, search }) => {
   const { label, description, min, max, step, integer } = setting;
 
   const value = get(setting);
@@ -81,9 +81,11 @@ export const NumericSettingSimple = view(({ setting, get, set }) => {
 
   return (
     <Setting
-      className="NumericSettingSimplte"
+      className="NumericSettingSimple"
       label={label}
       description={description}
+      labelSearchTarget={setting.labelSearchTarget}
+      search={search}
     >
       <FormGroup inline={true} fill={true} className="NumericSettingControls">
         <NumericInput
@@ -109,7 +111,7 @@ export const NumericSettingSimple = view(({ setting, get, set }) => {
  * This component applies a number of heuristics to make the experience smooth,
  * including automatic value step computation.
  */
-export const NumericSetting = view(({ setting, get, set }) => {
+export const NumericSetting = view(({ setting, get, set, search }) => {
   const { label, description, min, max, step, integer, onRelease } = setting;
   const value = get(setting);
 
@@ -154,7 +156,13 @@ export const NumericSetting = view(({ setting, get, set }) => {
   const v = Math.max(Math.min(value, max), min);
 
   return (
-    <Setting className="NumericSetting" label={label} description={description}>
+    <Setting
+      className="NumericSetting"
+      label={label}
+      description={description}
+      labelSearchTarget={setting.labelSearchTarget}
+      search={search}
+    >
       <FormGroup inline={true} fill={true} className="NumericSettingControls">
         <NumericInput
           onBlur={commitStringValue}

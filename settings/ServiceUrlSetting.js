@@ -45,7 +45,7 @@ export const createStateStore = overrides => {
   return urlStore;
 };
 
-export const ServiceUrlSetting = view(({ setting, get, set }) => {
+export const ServiceUrlSetting = view(({ setting, get, set, search }) => {
   const { label, description, stateStore, checkUrl } = setting;
 
   const urlStore = store({
@@ -66,6 +66,8 @@ export const ServiceUrlSetting = view(({ setting, get, set }) => {
       label={label}
       description={description}
       message={message}
+      search={search}
+      labelSearchTarget={setting.labelSearchTarget}
     >
       <ControlGroup fill={true}>
         <InputGroup

@@ -10,7 +10,7 @@ import { useDropzone } from "react-dropzone";
 import { Button } from "@blueprintjs/core";
 import { Setting } from "./Setting.js";
 
-export const FileSetting = view(({ setting, get, set }) => {
+export const FileSetting = view(({ setting, get, set, search }) => {
   const { label, description } = setting;
   const currentFile = store({ file: null });
 
@@ -38,7 +38,13 @@ export const FileSetting = view(({ setting, get, set }) => {
   ) : null;
 
   return (
-    <Setting className="FileSetting" label={label} description={description}>
+    <Setting
+      className="FileSetting"
+      label={label}
+      description={description}
+      search={search}
+      labelSearchTarget={setting.labelSearchTarget}
+    >
       <div {...getRootProps()}>
         <input {...getInputProps()} />
         <div

@@ -1,14 +1,13 @@
+.Settings .Section {
+  margin-bottom: 4em;
+}
+
 .Setting {
   margin-bottom: 3em;
 }
-.SectionDivider + div > section:first-of-type {
-  margin-top: 2.5em;
-}
-.SectionDivider + div > section:last-of-type {
-  margin-bottom: 4em;
-}
 .SectionDivider + div > p:first-of-type {
   color: var(--text-color-light);
+  margin-bottom: 2.5em;
 }
 .Setting label.bp3-label {
   margin-bottom: 0.5em;
@@ -66,4 +65,9 @@
 }
 .SettingMessage {
   margin: 0.5em 0;
+}
+
+.Settings .hl {
+  background-color: var(--search-highlight-background-color);
+  border-bottom: 2px solid var(--search-highlight-border-color);
 }

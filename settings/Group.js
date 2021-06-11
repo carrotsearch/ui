@@ -16,6 +16,8 @@ import { displayNoneIf } from "../Optional.js";
 import { isSettingVisible } from "./Setting.js";
 import { DeferredPlaceholder } from "../Deferred.js";
 
+import { getSearchHighlightHtml, SearchHighlight } from "../fuzzysearch.js";
+
 const useDeferredDisplay = (setting, timeout) => {
   const { settings, ...deferredSetting } = { ...setting };
   const [deferred, setDeferred] = useState(true);
@@ -46,8 +48,13 @@ export const DeferredGroups = view(({ timeout, setting, ...props }) => {
   );
 });
 
-export const Group = view(({ setting, get, set, className }) => {
-  const { label, description } = setting;
+export const Group = view(({ setting, get, set, className, search }) => {
+  const {
+    label,
+    labelSearchTarget,
+    description,
+    descriptionSearchTarget
+  } = setting;
 
   // We handle visibility of settings and groups by hiding the corresponding elements
   // rather than by removing/adding them to the DOM. The former is much faster.
@@ -60,22 +67,41 @@ export const Group = view(({ setting, get, set, className }) => {
         {(s.factory || getFactory(s))(
           s,
           s.get || setting.get || get,
-          s.set || setting.set || set
+          s.set || setting.set || set,
+          search
         )}
       </section>
     );
   });
 
   if (label) {
+    let descriptionHl = getSearchHighlightHtml(
+      search,
+      description,
+      descriptionSearchTarget
+    );
+
     return (
       <Section
         className={className}
-        label={label}
+        label={
+          <SearchHighlight
+            search={search}
+            text={label}
+            target={labelSearchTarget}
+          />
+        }
         style={displayNoneIf(!groupVisible)}
         folded={setting.folded}
         onHeaderClick={setting.onHeaderClick}
+        search={search}
       >
-        <p>{description}</p>
+        <SearchHighlight
+          search={search}
+          text={description}
+          target={descriptionSearchTarget}
+          elementType="p"
+        />
         {settings}
       </Section>
     );
@@ -89,44 +115,50 @@ export const Group = view(({ setting, get, set, className }) => {
 });
 
 const factories = {
-  group: (s, get, set) => {
-    return <Group setting={s} get={get} set={set} />;
+  group: (s, get, set, search) => {
+    return <Group setting={s} get={get} set={set} search={search} />;
   },
 
-  boolean: (s, get, set) => {
-    return <BooleanSetting setting={s} get={get} set={set} />;
+  boolean: (s, get, set, search) => {
+    return <BooleanSetting setting={s} get={get} set={set} search={search} />;
   },
 
-  string: (s, get, set) => {
-    return <StringSetting setting={s} get={get} set={set} />;
+  string: (s, get, set, search) => {
+    return <StringSetting setting={s} get={get} set={set} search={search} />;
   },
 
-  file: (s, get, set) => {
-    return <FileSetting setting={s} get={get} set={set} />;
+  file: (s, get, set, search) => {
+    return <FileSetting setting={s} get={get} set={set} search={search} />;
   },
 
-  "string-array": (s, get, set) => {
-    return <StringArraySetting setting={s} get={get} set={set} />;
+  "string-array": (s, get, set, search) => {
+    return (
+      <StringArraySetting setting={s} get={get} set={set} search={search} />
+    );
   },
 
-  enum: (s, get, set) => {
+  enum: (s, get, set, search) => {
     if (s.ui === "radio") {
-      return <RadioSetting setting={s} get={get} set={set} />;
+      return <RadioSetting setting={s} get={get} set={set} search={search} />;
     }
     if (s.ui === "select") {
-      return <SelectSetting setting={s} get={get} set={set} />;
+      return <SelectSetting setting={s} get={get} set={set} search={search} />;
     }
   },
-  number: (s, get, set) => {
+  number: (s, get, set, search) => {
     if (Number.isFinite(s.min) && Number.isFinite(s.max)) {
-      return <NumericSetting setting={s} get={get} set={set} />;
+      return <NumericSetting setting={s} get={get} set={set} search={search} />;
     } else {
-      return <NumericSettingSimple setting={s} get={get} set={set} />;
+      return (
+        <NumericSettingSimple setting={s} get={get} set={set} search={search} />
+      );
     }
   },
 
-  "service-url": (s, get, set) => {
-    return <ServiceUrlSetting setting={s} get={get} set={set} />;
+  "service-url": (s, get, set, search) => {
+    return (
+      <ServiceUrlSetting setting={s} get={get} set={set} search={search} />
+    );
   }
 };
 const getFactory = s => {

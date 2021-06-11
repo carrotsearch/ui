@@ -1,13 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import fuzzysort from "fuzzysort";
+
 import { DeferredGroups, Group } from "./Group.js";
 import { isEmpty } from "../lang/objects.js";
 import { persistentStore } from "../store/persistent-store.js";
 
 export { addFactory } from "./Group.js";
 
-export const Settings = ({ settings, get, set, defer = false, timeout }) =>
+import { checkSearchMatch, prepareSearchTarget } from "../fuzzysearch.js";
+
+export const Settings = ({
+  settings,
+  get,
+  set,
+  defer = false,
+  timeout,
+  search
+}) =>
   defer ? (
     <DeferredGroups
       className="Settings"
@@ -15,9 +26,16 @@ export const Settings = ({ settings, get, set, defer = false, timeout }) =>
       set={set}
       get={get}
       timeout={timeout}
+      search={search}
     />
   ) : (
-    <Group className="Settings" setting={settings} set={set} get={get} />
+    <Group
+      className="Settings"
+      setting={settings}
+      set={set}
+      get={get}
+      search={search}
+    />
   );
 
 Settings.propTypes = {
@@ -50,6 +68,58 @@ export const addAdvancedSettingsVisibility = (settings, isAdvancedVisible) => {
         );
       };
     }
+  });
+};
+
+/**
+ * Returns true if a setting matches the search phrase. For setting groups,
+ * we check the group label, description and any of the child settings
+ * for matches.
+ */
+const checkSettingSearchMatch = (setting, search) => {
+  if (setting.settings) {
+    if (checkSearchMatch(search, setting.labelSearchTarget)) {
+      return true;
+    }
+
+    if (
+      setting.descriptionSearchTarget &&
+      checkSearchMatch(search, setting.descriptionSearchTarget)
+    ) {
+      return true;
+    }
+
+    for (let i = 0; i < setting.settings.length; i++) {
+      if (checkSettingSearchMatch(setting.settings[i], search)) {
+        return true;
+      }
+    }
+
+    return false;
+  } else {
+    return checkSearchMatch(search, setting.labelSearchTarget);
+  }
+};
+
+export const addSettingsSearch = (settings, searchStringProvider) => {
+  forEachSetting(settings, s => {
+    s.labelSearchTarget = prepareSearchTarget(s.label);
+    if (s.settings && s.description) {
+      s.descriptionSearchTarget = prepareSearchTarget(s.description);
+    }
+
+    const visibilityFn = s.visible;
+    s.visible = () => {
+      let visible;
+      const search = searchStringProvider();
+      if (!search) {
+        visible = true;
+      } else {
+        visible = checkSettingSearchMatch(s, search);
+      }
+
+      return visible && (!visibilityFn || visibilityFn());
+    };
   });
 };
 

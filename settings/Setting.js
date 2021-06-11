@@ -6,19 +6,35 @@ import { FormGroup } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
 import { DescriptionPopover } from "../DescriptionPopover.js";
+import { SearchHighlight } from "../fuzzysearch.js";
 
 export const isSettingVisible = s => !s.visible || s.visible();
 
-export const LabelWithHelp = ({ label, description }) => {
+export const LabelWithHelp = ({
+  label,
+  description,
+  search,
+  labelSearchTarget
+}) => {
   if (description) {
     return (
       <div className="LabelWithHelp">
-        {label}
+        <SearchHighlight
+          text={label}
+          target={labelSearchTarget}
+          search={search}
+        />
         <SettingDescriptionPopover description={description} />
       </div>
     );
   } else {
-    return label;
+    return (
+      <SearchHighlight
+        text={label}
+        target={labelSearchTarget}
+        search={search}
+      />
+    );
   }
 };
 
@@ -36,6 +52,8 @@ export const Setting = ({
   label,
   description,
   message,
+  search,
+  labelSearchTarget,
   children
 }) => {
   let messageElement;
@@ -46,7 +64,14 @@ export const Setting = ({
     <FormGroup
       className={`${className} Setting`}
       inline={inline}
-      label={<LabelWithHelp label={label} description={description} />}
+      label={
+        <LabelWithHelp
+          label={label}
+          description={description}
+          search={search}
+          labelSearchTarget={labelSearchTarget}
+        />
+      }
     >
       {children}
       {messageElement}

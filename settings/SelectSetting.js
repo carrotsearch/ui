@@ -6,7 +6,7 @@ import { HTMLSelect } from "@blueprintjs/core";
 import { view } from "@risingstack/react-easy-state";
 import { Setting } from "./Setting.js";
 
-export const SelectSetting = view(({ setting, get, set }) => {
+export const SelectSetting = view(({ setting, get, set, search }) => {
   const {
     label,
     options,
@@ -33,7 +33,13 @@ export const SelectSetting = view(({ setting, get, set }) => {
     );
 
   return (
-    <Setting className="SelectSetting" label={label} description={description}>
+    <Setting
+      className="SelectSetting"
+      label={label}
+      description={description}
+      search={search}
+      labelSearchTarget={setting.labelSearchTarget}
+    >
       {content}
     </Setting>
   );
