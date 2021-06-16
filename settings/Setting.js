@@ -8,7 +8,8 @@ import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
 import { DescriptionPopover } from "../DescriptionPopover.js";
 import { SearchHighlight } from "../fuzzysearch.js";
 
-export const isSettingVisible = s => !s.visible || s.visible();
+export const isSettingVisible = s =>
+  (!s.visible || s.visible()) && (!s.enabled || s.enable());
 
 export const LabelWithHelp = ({
   label,
