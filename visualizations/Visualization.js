@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
+import debounce from "lodash.debounce";
+
 Visualization.propTypes = {
   impl: PropTypes.object.isRequired,
   implRef: PropTypes.object,
@@ -18,10 +20,12 @@ export function Visualization(props) {
 
   // Dispose on unmount
   useEffect(() => {
-    if (instance.current) {
-      props.impl.dispose(instance.current);
-      instance.current = undefined;
-    }
+    return () => {
+      if (instance.current) {
+        props.impl.dispose(instance.current);
+        instance.current = undefined;
+      }
+    };
   }, [props.impl]);
 
   useEffect(() => {
@@ -54,17 +58,24 @@ export function Visualization(props) {
     }
   }, [props.selection, props.impl]);
 
+  const resizeObserver = useRef(
+    new ResizeObserver(
+      debounce(() => {
+        if (instance.current) {
+          props.impl.resize(instance.current);
+        }
+      }, 100)
+    )
+  );
   useEffect(() => {
-    let timeout;
-    const onResize = () => {
-      window.clearTimeout(timeout);
-      timeout = window.setTimeout(() => {
-        props.impl.resize(instance.current);
-      }, 300);
-    };
+    const el = element.current;
+    if (el) {
+      resizeObserver.current.observe(el);
+    }
 
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    return () => {
+      resizeObserver.current.unobserve(el);
+    };
   }, [props.impl]);
 
   const style = { position: "absolute", top: 0, bottom: 0, left: 0, right: 0 };
