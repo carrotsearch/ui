@@ -4,10 +4,17 @@ import fuzzysort from "fuzzysort";
 
 export const getSearchHighlightHtml = (search, text, target) => {
   if (search && target) {
-    const result = checkSearchMatch(search, target);
-    if (result) {
-      return fuzzysort.highlight(result, "<b class='hl'>", "</b>");
-    }
+    return getSearchHighlightHtmlForResult(
+      checkSearchMatch(search, target),
+      text
+    );
+  }
+  return text;
+};
+
+const getSearchHighlightHtmlForResult = (result, text) => {
+  if (result) {
+    return fuzzysort.highlight(result, "<b class='hl'>", "</b>");
   }
   return text;
 };
@@ -25,11 +32,14 @@ export const SearchHighlight = ({
   text,
   target,
   search,
-  elementType = "span"
+  elementType = "span",
+  result
 }) => {
   return React.createElement(elementType, {
     dangerouslySetInnerHTML: {
-      __html: getSearchHighlightHtml(search, text, target)
+      __html: result
+        ? getSearchHighlightHtmlForResult(result, text)
+        : getSearchHighlightHtml(search, text, target)
     }
   });
 };

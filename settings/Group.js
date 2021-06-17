@@ -13,10 +13,12 @@ import { StringArraySetting } from "./StringArraySetting.js";
 import { FileSetting } from "./FileSetting.js";
 import { ServiceUrlSetting } from "./ServiceUrlSetting.js";
 import { displayNoneIf } from "../Optional.js";
-import { isSettingVisible } from "./Setting.js";
 import { DeferredPlaceholder } from "../Deferred.js";
 
-import { getSearchHighlightHtml, SearchHighlight } from "../fuzzysearch.js";
+import { checkSearchMatch, SearchHighlight } from "../fuzzysearch.js";
+
+const isSettingVisible = (s, arg) =>
+  (!s.visible || s.visible(arg)) && (!s.enabled || s.enable());
 
 const useDeferredDisplay = (setting, timeout) => {
   const { settings, ...deferredSetting } = { ...setting };
@@ -58,10 +60,18 @@ export const Group = view(({ setting, get, set, className, search }) => {
 
   // We handle visibility of settings and groups by hiding the corresponding elements
   // rather than by removing/adding them to the DOM. The former is much faster.
-  let groupVisible = false;
+  const groupVisible = isSettingVisible(setting);
+
+  // If the group matches the search query, show all child settings,
+  // even if they don't match the search.
+  const labelMatch = checkSearchMatch(search, labelSearchTarget);
+  const descriptionMatch = checkSearchMatch(search, descriptionSearchTarget);
+  const groupMatchesSearch = labelMatch !== null || descriptionMatch !== null;
+
+  let anyChildVisible = false;
   const settings = setting.settings.map(s => {
-    const settingVisible = isSettingVisible(s);
-    groupVisible |= settingVisible;
+    const settingVisible = isSettingVisible(s, groupMatchesSearch);
+    anyChildVisible |= settingVisible;
     return (
       <section key={s.id} id={s.id} style={displayNoneIf(!settingVisible)}>
         {(s.factory || getFactory(s))(
@@ -74,32 +84,26 @@ export const Group = view(({ setting, get, set, className, search }) => {
     );
   });
 
-  if (label) {
-    let descriptionHl = getSearchHighlightHtml(
-      search,
-      description,
-      descriptionSearchTarget
-    );
+  const showGroup = groupVisible && anyChildVisible;
 
+  if (label) {
     return (
       <Section
         className={className}
         label={
           <SearchHighlight
-            search={search}
+            result={labelMatch}
             text={label}
-            target={labelSearchTarget}
           />
         }
-        style={displayNoneIf(!groupVisible)}
+        style={displayNoneIf(!showGroup)}
         folded={setting.folded}
         onHeaderClick={setting.onHeaderClick}
         search={search}
       >
         <SearchHighlight
-          search={search}
+          result={descriptionMatch}
           text={description}
-          target={descriptionSearchTarget}
           elementType="p"
         />
         {settings}
@@ -107,7 +111,7 @@ export const Group = view(({ setting, get, set, className, search }) => {
     );
   } else {
     return (
-      <section className={className} style={displayNoneIf(!groupVisible)}>
+      <section className={className} style={displayNoneIf(!showGroup)}>
         {settings}
       </section>
     );

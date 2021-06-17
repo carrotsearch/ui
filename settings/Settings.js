@@ -61,10 +61,10 @@ export const addAdvancedSettingsVisibility = (settings, isAdvancedVisible) => {
   forEachSetting(settings, s => {
     if (s.advanced) {
       const visibilityFn = s.visible;
-      s.visible = () => {
+      s.visible = (arg) => {
         return (
           (s.advanced || false) === isAdvancedVisible() &&
-          (!visibilityFn || visibilityFn())
+          (!visibilityFn || visibilityFn(arg))
         );
       };
     }
@@ -109,13 +109,18 @@ export const addSettingsSearch = (settings, searchStringProvider) => {
     }
 
     const visibilityFn = s.visible;
-    s.visible = () => {
+    s.visible = (ignoreSearch) => {
       let visible;
-      const search = searchStringProvider();
-      if (!search) {
+
+      if (ignoreSearch) {
         visible = true;
       } else {
-        visible = checkSettingSearchMatch(s, search);
+        const search = searchStringProvider();
+        if (!search) {
+          visible = true;
+        } else {
+          visible = checkSettingSearchMatch(s, search);
+        }
       }
 
       return visible && (!visibilityFn || visibilityFn());
