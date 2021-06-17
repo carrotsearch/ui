@@ -90,12 +90,7 @@ export const Group = view(({ setting, get, set, className, search }) => {
     return (
       <Section
         className={className}
-        label={
-          <SearchHighlight
-            result={labelMatch}
-            text={label}
-          />
-        }
+        label={<SearchHighlight result={labelMatch} text={label} />}
         style={displayNoneIf(!showGroup)}
         folded={setting.folded}
         onHeaderClick={setting.onHeaderClick}
