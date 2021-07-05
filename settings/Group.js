@@ -18,7 +18,7 @@ import { DeferredPlaceholder } from "../Deferred.js";
 import { checkSearchMatch, SearchHighlight } from "../fuzzysearch.js";
 
 const isSettingVisible = (s, arg) =>
-  (!s.visible || s.visible(arg)) && (!s.enabled || s.enable());
+  (!s.visible || s.visible(arg)) && (!s.enabled || s.enabled());
 
 const useDeferredDisplay = (setting, timeout) => {
   const { settings, ...deferredSetting } = { ...setting };
