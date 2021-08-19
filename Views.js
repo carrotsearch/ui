@@ -75,8 +75,7 @@ const Switch = props => {
   return (
     <div
       style={{
-        display: props.visible ? "block" : "none",
-        position: "relative"
+        display: props.visible ? "block" : "none"
       }}
     >
       {props.createElement(props.visible, props.props)}
