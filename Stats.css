@@ -21,6 +21,12 @@
   margin-bottom: 0.125em;
 }
 
+.Stat > strong svg {
+  vertical-align: 50%;
+  font-size: 40%;
+  margin-left: 0.25em;
+}
+
 .Stat > small {
   font-size: 100%;
   color: var(--text-color-lighter);
