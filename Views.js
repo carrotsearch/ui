@@ -4,14 +4,7 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Button,
-  Classes,
-  ControlGroup,
-  Popover,
-  Position,
-  Tab
-} from "@blueprintjs/core";
+import { Button, Classes, ControlGroup, Tab } from "@blueprintjs/core";
 import { PointedTabs } from "./PointedTabs.js";
 
 import "./Views.css";
@@ -60,13 +53,23 @@ export const Tool = ({ tool, visible, props }) => {
   }
 };
 
-const Switch = props => {
+// Don't render if the contents of the tab is not visible.
+const SwitchContent = React.memo(
+  ({ visible, createElement }) => {
+    return <>{createElement(visible)}</>;
+  },
+  (prev, next) => {
+    return !next.visible;
+  }
+);
+
+const Switch = ({ visible, createElement }) => {
   const [initialized, setInitialized] = useState(false);
   useEffect(() => {
-    if (props.visible) {
+    if (visible) {
       setInitialized(true);
     }
-  }, [props.visible]);
+  }, [visible]);
 
   if (!initialized) {
     return null;
@@ -75,10 +78,10 @@ const Switch = props => {
   return (
     <div
       style={{
-        display: props.visible ? "block" : "none"
+        display: visible ? "block" : "none"
       }}
     >
-      {props.createElement(props.visible, props.props)}
+      <SwitchContent visible={visible} createElement={createElement} />
     </div>
   );
 };
@@ -99,8 +102,7 @@ export const Views = ({
   className,
   activeView,
   onViewChange,
-  children,
-  ...props
+  children
 }) => {
   // Flatten views from all groups into a single object.
   const allViews = flattenViews(views);
@@ -133,12 +135,7 @@ export const Views = ({
             allViews[v].tools.forEach(t => {
               const key = v + "." + t.id;
               tools.push(
-                <Tool
-                  key={key}
-                  tool={t}
-                  visible={activeView === v}
-                  props={props}
-                />
+                <Tool key={key} tool={t} visible={activeView === v} />
               );
             });
             return tools;
@@ -152,7 +149,6 @@ export const Views = ({
               key={v}
               visible={v === activeView}
               createElement={allViews[v].createContentElement}
-              props={props}
             />
           );
         })}
