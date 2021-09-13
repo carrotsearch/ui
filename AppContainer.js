@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 
 import "./AppContainer.css";
 
@@ -30,6 +30,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { errors } from "./store/errors.js";
 import { ThemeSwitch } from "./ThemeSwitch.js";
 import { ToolPopover } from "./ToolPopover.js";
+import { Loading } from "./Loading.js";
 
 const AppLink = ({ to, title, children, icon }) => {
   const [open, setOpen] = useState(false);
@@ -156,7 +157,11 @@ export const AppContainerInternal = ({
                 <Route
                   key={app.props.path}
                   path={app.props.path}
-                  component={app.props.component}
+                  render={() => (
+                    <Suspense fallback={<Loading isLoading={() => true} />}>
+                      {React.createElement(app.props.component)}
+                    </Suspense>
+                  )}
                 />
               );
             })}
