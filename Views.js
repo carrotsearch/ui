@@ -78,7 +78,7 @@ const Switch = ({ visible, createElement }) => {
   return (
     <div
       style={{
-        display: visible ? "block" : "none"
+        visibility: visible ? "visible" : "hidden"
       }}
     >
       <SwitchContent visible={visible} createElement={createElement} />
