@@ -58,6 +58,12 @@ table {
   border-spacing: 0;
 }
 
+table th,
+table td {
+  text-align: left;
+  vertical-align: top;
+}
+
 table th:not(:last-of-type),
 table td:not(:last-of-type) {
   padding: 0 0.5em 0 0;
