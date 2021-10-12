@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import classNames from "classnames";
+import { view } from "@risingstack/react-easy-state";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Classes, ControlGroup, Tab } from "@blueprintjs/core";
 import { PointedTabs } from "./PointedTabs.js";
+import { ToolPopover } from "./ToolPopover.js";
 
 import "./Views.css";
-import { ToolPopover } from "./ToolPopover.js";
 
 const ShowHide = props => {
   return (
@@ -162,3 +163,25 @@ Views.propTypes = {
   views: PropTypes.array.isRequired,
   onViewChange: PropTypes.func.isRequired
 };
+
+export const renderIfNextVisible = comp =>
+  React.memo(comp, (prev, next) => !next["visible"]);
+
+/**
+ * Wraps a component in an react-easy-state view in such a way that the
+ * component renders only if the "visible" property passed to it is true.
+ * If "visible" is false, the component doesn't render even if the
+ * "inner" react-easy-state store changes and would normally force a
+ * re-render.
+ *
+ * This is useful for wrapping components rendering the content in the
+ * tabbed view. If the view has many tabs, we don't want to eagerly render
+ * all tabs if the underlying data changes. Instead, we only want to re-render
+ * the visible tab and render the remaining tabs only when they become visible,
+ * if at all.
+ */
+export const lazyView = component => {
+  const Lazy = renderIfNextVisible(props => component(props));
+  return view(props => <Lazy {...props} />);
+};
+
