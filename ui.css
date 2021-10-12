@@ -56,6 +56,7 @@ code {
 
 table {
   border-spacing: 0;
+  --column-spacing: 0.5em;
 }
 
 table th,
@@ -66,7 +67,7 @@ table td {
 
 table th:not(:last-of-type),
 table td:not(:last-of-type) {
-  padding: 0 0.5em 0 0;
+  padding: 0 var(--column-spacing) 0 0;
 }
 
 ::-webkit-scrollbar {
