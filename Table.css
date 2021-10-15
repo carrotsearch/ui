@@ -1,0 +1,32 @@
+.Table th > button {
+  text-align: inherit;
+  font-weight: bold;
+  color: var(--text-color);
+  width: 100%;
+}
+
+.Table .SortIcon {
+  margin-left: 0.5em;
+}
+
+.TablePaging button.link {
+  width: 2em;
+}
+
+.TablePaging .bp3-input-group {
+  display: inline;
+}
+
+.TablePaging .bp3-input {
+  width: 3em;
+  height: 2em;
+  vertical-align: -2%;
+  margin: 0 0.5em;
+  text-align: center;
+}
+
+.TablePaging > span {
+  margin: 0 0.5em;
+  position: relative;
+  top: 0.125em;
+}

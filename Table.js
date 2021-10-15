@@ -4,11 +4,22 @@ import { view, store } from "@risingstack/react-easy-state";
 
 import { ButtonLink } from "./ButtonLink.js";
 
+import { InputGroup, Button } from "@blueprintjs/core";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCaretUp } from "@fortawesome/pro-regular-svg-icons";
+import {
+  faCaretDown,
+  faCaretUp,
+  faChevronDoubleLeft,
+  faChevronDoubleRight,
+  faChevronLeft,
+  faChevronRight
+} from "@fortawesome/pro-regular-svg-icons";
 
 import { reversedComparator } from "./lang/comparator.js";
 import { insertZWSPAtCamelCase } from "./lang/strings.js";
+
+import "./Table.css";
 
 const cellRenderers = {
   toString: v => `${v}`,
@@ -68,6 +79,29 @@ const SortIcon = ({ direction }) => {
   return <FontAwesomeIcon className="SortIcon" icon={icon} />;
 };
 
+const PagingButton = ({ icon }) => {
+  return (
+    <Button minimal={true} small={true}>
+      <FontAwesomeIcon icon={icon} />
+    </Button>
+  );
+};
+
+export const TablePaging = view(({ rowCount, limit, onPageChange }) => {
+  return (
+    <div className="TablePaging">
+      <PagingButton icon={faChevronDoubleLeft} />
+      <PagingButton icon={faChevronLeft} />
+      <span>
+        page
+        <InputGroup small={false} />
+        of 10
+      </span>
+      <PagingButton icon={faChevronRight} />
+      <PagingButton icon={faChevronDoubleRight} />
+    </div>
+  );
+});
 
 export const Table = view(({ spec, limit }) => {
   const resolvedSpec = resolveSpec(spec);
@@ -128,20 +162,20 @@ export const Table = view(({ spec, limit }) => {
   return (
     <table className="Table">
       <thead>
-      <tr>
-        {resolvedSpec.columns.map((c, i) => {
-          return (
-            <th key={c.key} className={c.className}>
-              <ButtonLink onClick={() => sortStore.toggle(i)}>
-                {c.name}
-                {i === sortColumn ? (
-                  <SortIcon direction={sortDirection} />
-                ) : null}
-              </ButtonLink>
-            </th>
-          );
-        })}
-      </tr>
+        <tr>
+          {resolvedSpec.columns.map((c, i) => {
+            return (
+              <th key={c.key} className={c.className}>
+                <ButtonLink onClick={() => sortStore.toggle(i)}>
+                  {c.name}
+                  {i === sortColumn ? (
+                    <SortIcon direction={sortDirection} />
+                  ) : null}
+                </ButtonLink>
+              </th>
+            );
+          })}
+        </tr>
       </thead>
 
       <tbody>{rows}</tbody>
