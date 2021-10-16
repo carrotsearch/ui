@@ -125,6 +125,10 @@ export const TablePaging = view(
     onLast,
     onPageChange
   }) => {
+    if (pageCount < 2) {
+      return null;
+    }
+
     return (
       <div className="TablePaging">
         <PagingButton onClick={onFirst} icon={faChevronDoubleLeft} />
