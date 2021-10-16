@@ -136,7 +136,8 @@ export const TablePaging = view(
             initial={currentPage}
             onChange={onPageChange}
           />
-          of {pageCount}
+          of
+          <strong>{pageCount}</strong>
         </span>
         <PagingButton onClick={onNext} icon={faChevronRight} />
         <PagingButton onClick={onLast} icon={faChevronDoubleRight} />
@@ -193,25 +194,25 @@ const useSort = spec => {
 
 const usePaging = (spec, limit) => {
   const paging = store({
-    current: 0
+    current: 1
   });
 
   const rowCount = spec.rowCount;
   const pageCount = Math.ceil(rowCount / limit);
-  const maxPage = pageCount - 1;
+  const maxPage = pageCount;
 
   const currentPage = paging.current;
-  const start = limit * currentPage;
+  const start = limit * (currentPage - 1);
 
   return {
     currentPage,
     pageCount,
     start,
     next: () => (paging.current = Math.min(maxPage, currentPage + 1)),
-    prev: () => (paging.current = Math.max(0, currentPage - 1)),
-    first: () => (paging.current = 0),
+    prev: () => (paging.current = Math.max(1, currentPage - 1)),
+    first: () => (paging.current = 1),
     last: () => (paging.current = maxPage),
-    set: p => (paging.current = Math.min(maxPage, Math.max(0, p)))
+    set: p => (paging.current = Math.min(maxPage, Math.max(1, p)))
   };
 };
 

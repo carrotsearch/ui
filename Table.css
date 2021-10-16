@@ -32,6 +32,11 @@
   color: var(--text-color-lighter);
 }
 
+.TablePaging > span > strong {
+  margin-left: 0.5em;
+  font-weight: normal;
+}
+
 .TablePaging .bp3-button {
   color: var(--text-color-lightest);
 }
