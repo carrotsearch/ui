@@ -1,10 +1,12 @@
 import React from "react";
 
-import { view, store } from "@risingstack/react-easy-state";
+import classnames from "classnames";
+
+import { store, view } from "@risingstack/react-easy-state";
 
 import { ButtonLink } from "./ButtonLink.js";
 
-import { InputGroup, Button } from "@blueprintjs/core";
+import { Button, InputGroup } from "@blueprintjs/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -79,33 +81,71 @@ const SortIcon = ({ direction }) => {
   return <FontAwesomeIcon className="SortIcon" icon={icon} />;
 };
 
-const PagingButton = ({ icon }) => {
+const PagingButton = ({ icon, onClick }) => {
   return (
-    <Button minimal={true} small={true}>
+    <Button minimal={true} small={true} onClick={onClick}>
       <FontAwesomeIcon icon={icon} />
     </Button>
   );
 };
 
-export const TablePaging = view(({ rowCount, limit, onPageChange }) => {
+const IntegerInput = view(({ initial, onChange }) => {
+  const state = store({
+    value: `${initial}`
+  });
+  const commitValue = () => {
+    const val = state.value;
+    const parsed = parseInt(val);
+    if (!isNaN(parsed)) {
+      onChange(parsed);
+    }
+  };
   return (
-    <div className="TablePaging">
-      <PagingButton icon={faChevronDoubleLeft} />
-      <PagingButton icon={faChevronLeft} />
-      <span>
-        page
-        <InputGroup small={false} />
-        of 10
-      </span>
-      <PagingButton icon={faChevronRight} />
-      <PagingButton icon={faChevronDoubleRight} />
-    </div>
+    <InputGroup
+      small={false}
+      value={state.value}
+      onChange={e => (state.value = e.target.value)}
+      onKeyUp={e => {
+        if (e.key === "Enter") {
+          commitValue(e);
+        }
+      }}
+      onBlur={commitValue}
+    />
   );
 });
 
-export const Table = view(({ spec, limit }) => {
-  const resolvedSpec = resolveSpec(spec);
+export const TablePaging = view(
+  ({
+    currentPage,
+    pageCount,
+    onFirst,
+    onPrev,
+    onNext,
+    onLast,
+    onPageChange
+  }) => {
+    return (
+      <div className="TablePaging">
+        <PagingButton onClick={onFirst} icon={faChevronDoubleLeft} />
+        <PagingButton onClick={onPrev} icon={faChevronLeft} />
+        <span>
+          page
+          <IntegerInput
+            key={currentPage}
+            initial={currentPage}
+            onChange={onPageChange}
+          />
+          of {pageCount}
+        </span>
+        <PagingButton onClick={onNext} icon={faChevronRight} />
+        <PagingButton onClick={onLast} icon={faChevronDoubleRight} />
+      </div>
+    );
+  }
+);
 
+const useSort = spec => {
   const initialSortColumn = spec.columns.find(c => c.sort && c.sort !== "none");
   const sortStore = store({
     column: initialSortColumn
@@ -121,6 +161,7 @@ export const Table = view(({ spec, limit }) => {
       }
     }
   });
+  const toggleSort = sortStore.toggle;
   const sortColumn = sortStore.column;
   const sortDirection = sortStore.direction;
 
@@ -137,15 +178,53 @@ export const Table = view(({ spec, limit }) => {
     }
     indices.sort((a, b) => {
       return comparator(
-        resolvedSpec.valueAt(a, sortColumn),
-        resolvedSpec.valueAt(b, sortColumn)
+        spec.valueAt(a, sortColumn),
+        spec.valueAt(b, sortColumn)
       );
     });
   }
 
-  const count = Math.min(limit, resolvedSpec.rowCount);
+  const getSortDirection = columnIndex => {
+    return columnIndex === sortColumn ? sortDirection : undefined;
+  };
+
+  return { toggleSort, getSortDirection, indices };
+};
+
+const usePaging = (spec, limit) => {
+  const paging = store({
+    current: 0
+  });
+
+  const rowCount = spec.rowCount;
+  const pageCount = Math.ceil(rowCount / limit);
+  const maxPage = pageCount - 1;
+
+  const currentPage = paging.current;
+  const start = limit * currentPage;
+
+  return {
+    currentPage,
+    pageCount,
+    start,
+    next: () => (paging.current = Math.min(maxPage, currentPage + 1)),
+    prev: () => (paging.current = Math.max(0, currentPage - 1)),
+    first: () => (paging.current = 0),
+    last: () => (paging.current = maxPage),
+    set: p => (paging.current = Math.min(maxPage, Math.max(0, p)))
+  };
+};
+
+export const Table = view(({ spec, limit, className }) => {
+  const resolvedSpec = resolveSpec(spec);
+
+  const { toggleSort, getSortDirection, indices } = useSort(resolvedSpec);
+  const { pageCount, currentPage, first, last, next, prev, set, start } =
+    usePaging(resolvedSpec, limit);
+
+  const end = Math.min(start + limit, resolvedSpec.rowCount);
   const rows = [];
-  for (let i = 0; i < count; i++) {
+  for (let i = start; i < end; i++) {
     rows.push(
       <tr key={i}>
         {resolvedSpec.columns.map((c, j) => {
@@ -160,25 +239,37 @@ export const Table = view(({ spec, limit }) => {
   }
 
   return (
-    <table className="Table">
-      <thead>
-        <tr>
-          {resolvedSpec.columns.map((c, i) => {
-            return (
-              <th key={c.key} className={c.className}>
-                <ButtonLink onClick={() => sortStore.toggle(i)}>
-                  {c.name}
-                  {i === sortColumn ? (
-                    <SortIcon direction={sortDirection} />
-                  ) : null}
-                </ButtonLink>
-              </th>
-            );
-          })}
-        </tr>
-      </thead>
+    <>
+      <TablePaging
+        pageCount={pageCount}
+        currentPage={currentPage}
+        onFirst={first}
+        onPrev={prev}
+        onNext={next}
+        onLast={last}
+        onPageChange={set}
+      />
 
-      <tbody>{rows}</tbody>
-    </table>
+      <div className={classnames("Table", className)}>
+        <table>
+          <thead>
+            <tr>
+              {resolvedSpec.columns.map((c, i) => {
+                return (
+                  <th key={c.key} className={c.className}>
+                    <ButtonLink onClick={() => toggleSort(i)}>
+                      {c.name}
+                      <SortIcon direction={getSortDirection(i)} />
+                    </ButtonLink>
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+    </>
   );
 });

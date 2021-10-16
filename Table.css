@@ -20,7 +20,7 @@
 .TablePaging .bp3-input {
   width: 3em;
   height: 2em;
-  vertical-align: -2%;
+  vertical-align: 0%;
   margin: 0 0.5em;
   text-align: center;
 }
@@ -29,4 +29,9 @@
   margin: 0 0.5em;
   position: relative;
   top: 0.125em;
+  color: var(--text-color-lighter);
+}
+
+.TablePaging .bp3-button {
+  color: var(--text-color-lightest);
 }
