@@ -17,12 +17,11 @@
   position: relative;
   grid-area: content;
   overflow: auto;
-  margin-top: var(--leading);
 }
 
 .ViewsContent > div {
   position: absolute;
-  top: 0;
+  top: var(--leading);
   bottom: 0;
   left: 0;
   right: 0;
