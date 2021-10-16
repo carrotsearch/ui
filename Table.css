@@ -1,3 +1,9 @@
+.Table th {
+  padding-bottom: 0.25em;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
 .Table th > button {
   text-align: inherit;
   font-weight: bold;
@@ -39,4 +45,13 @@
 
 .TablePaging .bp3-button {
   color: var(--text-color-lightest);
+}
+
+.Table table:focus {
+  outline: none;
+}
+.Table table:focus th {
+  border-bottom: 1px solid var(--hr-color);
+
+  /*background-color: var(--background-color-tertiary);*/
 }

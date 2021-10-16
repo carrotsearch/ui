@@ -67,7 +67,7 @@ table td {
 
 table th:not(:last-of-type),
 table td:not(:last-of-type) {
-  padding: 0 var(--column-spacing) 0 0;
+  padding-right: var(--column-spacing);
 }
 
 ::-webkit-scrollbar {

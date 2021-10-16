@@ -227,6 +227,26 @@ export const Table = view(({ spec, limit, className }) => {
   const { pageCount, currentPage, first, last, next, prev, set, start } =
     usePaging(resolvedSpec, limit);
 
+  const onKeyDown = e => {
+    switch (e.key) {
+      case "ArrowLeft":
+        if (e.ctrlKey) {
+          first();
+        } else {
+          prev();
+        }
+        break;
+
+      case "ArrowRight":
+        if (e.ctrlKey) {
+          last()
+        } else {
+          next();
+        }
+        break;
+    }
+  };
+
   const end = Math.min(start + limit, resolvedSpec.rowCount);
   const rows = [];
   for (let i = start; i < end; i++) {
@@ -256,7 +276,7 @@ export const Table = view(({ spec, limit, className }) => {
       />
 
       <div className={classnames("Table", className)}>
-        <table>
+        <table tabIndex={0} onKeyDown={onKeyDown}>
           <thead>
             <tr>
               {resolvedSpec.columns.map((c, i) => {
