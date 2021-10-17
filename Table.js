@@ -123,14 +123,15 @@ export const TablePaging = view(
     onPrev,
     onNext,
     onLast,
-    onPageChange
+    onPageChange,
+    onKeyDown
   }) => {
     if (pageCount < 2) {
       return null;
     }
 
     return (
-      <div className="TablePaging">
+      <div className="TablePaging" onKeyDown={onKeyDown}>
         <PagingButton onClick={onFirst} icon={faChevronDoubleLeft} />
         <PagingButton onClick={onPrev} icon={faChevronLeft} />
         <span>
@@ -228,6 +229,9 @@ export const Table = view(({ spec, limit, className }) => {
     usePaging(resolvedSpec, limit);
 
   const onKeyDown = e => {
+    if (e.target.matches("input")) {
+      return;
+    }
     switch (e.key) {
       case "ArrowLeft":
         if (e.ctrlKey) {
@@ -273,6 +277,7 @@ export const Table = view(({ spec, limit, className }) => {
         onNext={next}
         onLast={last}
         onPageChange={set}
+        onKeyDown={onKeyDown}
       />
 
       <div className={classnames("Table", className)}>
