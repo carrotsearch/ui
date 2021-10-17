@@ -221,12 +221,11 @@ const usePaging = (spec, limit) => {
   };
 };
 
-export const Table = view(({ spec, limit, className }) => {
-  const resolvedSpec = resolveSpec(spec);
-
-  const { toggleSort, getSortDirection, indices } = useSort(resolvedSpec);
+const TableContent = view(({ spec, sort, limit, className }) => {
   const { pageCount, currentPage, first, last, next, prev, set, start } =
-    usePaging(resolvedSpec, limit);
+    usePaging(spec, limit);
+
+  const { toggleSort, getSortDirection, indices } = sort;
 
   const onKeyDown = e => {
     if (e.target.matches("input")) {
@@ -243,7 +242,7 @@ export const Table = view(({ spec, limit, className }) => {
 
       case "ArrowRight":
         if (e.ctrlKey) {
-          last()
+          last();
         } else {
           next();
         }
@@ -251,15 +250,15 @@ export const Table = view(({ spec, limit, className }) => {
     }
   };
 
-  const end = Math.min(start + limit, resolvedSpec.rowCount);
+  const end = Math.min(start + limit, spec.rowCount);
   const rows = [];
   for (let i = start; i < end; i++) {
     rows.push(
       <tr key={i}>
-        {resolvedSpec.columns.map((c, j) => {
+        {spec.columns.map((c, j) => {
           return (
             <td key={c.key} className={c.className}>
-              {c.render(resolvedSpec.valueAt(indices[i], j))}
+              {c.render(spec.valueAt(indices[i], j))}
             </td>
           );
         })}
@@ -284,7 +283,7 @@ export const Table = view(({ spec, limit, className }) => {
         <table tabIndex={0} onKeyDown={onKeyDown}>
           <thead>
             <tr>
-              {resolvedSpec.columns.map((c, i) => {
+              {spec.columns.map((c, i) => {
                 return (
                   <th key={c.key} className={c.className}>
                     <ButtonLink onClick={() => toggleSort(i)}>
@@ -301,5 +300,21 @@ export const Table = view(({ spec, limit, className }) => {
         </table>
       </div>
     </>
+  );
+});
+
+export const Table = view(({ spec, limit, className }) => {
+  const resolvedSpec = resolveSpec(spec);
+  const sort = useSort(resolvedSpec);
+
+  // Key by spec to drop paging state when the spec changes.
+  return (
+    <TableContent
+      key={spec}
+      spec={resolvedSpec}
+      sort={sort}
+      limit={limit}
+      className={className}
+    />
   );
 });
