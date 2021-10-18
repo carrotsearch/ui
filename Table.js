@@ -175,7 +175,7 @@ const useSort = spec => {
   const rowCount = spec.rowCount;
   let indices = new Array(rowCount);
   for (let i = 0; i < rowCount; i++) {
-    indices.push(i);
+    indices[i] = i;
   }
   if (sortColumn >= 0) {
     let comparator = spec.columns[sortColumn].comparator;
