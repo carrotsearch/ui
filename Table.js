@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 
 import classnames from "classnames";
 
@@ -22,6 +22,60 @@ import { reversedComparator } from "./lang/comparator.js";
 import { insertZWSPAtCamelCase } from "./lang/strings.js";
 
 import "./Table.css";
+
+const getHeight = (parent, selector) => {
+  if (parent) {
+    const child = parent.querySelector(selector);
+    if (child) {
+      return child.getBoundingClientRect().height;
+    }
+  }
+  return undefined;
+};
+
+/**
+ * Computes the number of labels per page to fill the window.
+ */
+export const useDynamicTableLimit = (element, getRowsPerPage) => {
+  // We'll keep the computed number of rows here.
+  // The code starts with some reasonable default, performs an initial render
+  // with this number of rows to measure row height and then computes the target
+  // value based on the row and container dimensions. The extra initial render
+  // should not be visible to the user.
+  // For now, we only recompute the number of rows per page when table
+  // data changes, we don't do it when window size changes.
+  const limitStore = store({
+    limit: 25
+  });
+
+  const rowsPerPage = getRowsPerPage();
+  const autoRowsPerPage = rowsPerPage === "auto";
+  useLayoutEffect(() => {
+    if (!autoRowsPerPage) {
+      return;
+    }
+
+    const parent = element.current;
+    const tableHeight = getHeight(parent, ".Table");
+    if (tableHeight) {
+      // Take the minimum row height for the calculations. This may
+      // occasionally show a scroll slider if some long labels introduce
+      // line breaks, but this shouldn't be a problem.
+      let minHeight = Number.MAX_VALUE;
+      for (let r of parent.querySelectorAll("tr")) {
+        minHeight = Math.min(minHeight, r.getBoundingClientRect().height);
+      }
+
+      // We need to subtract the table header height.
+      const headHeight = getHeight(parent, "thead");
+
+      if (minHeight !== Number.MAX_VALUE) {
+        limitStore.limit = Math.floor((tableHeight - headHeight) / minHeight);
+      }
+    }
+  });
+  return autoRowsPerPage ? limitStore.limit : rowsPerPage;
+};
 
 const cellRenderers = {
   toString: v => `${v}`,
