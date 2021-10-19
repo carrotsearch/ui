@@ -213,6 +213,10 @@ const useSort = spec => {
       : -1,
     direction: initialSortColumn?.sort,
     toggle: column => {
+      if (!spec.columns[column].comparator) {
+        return;
+      }
+
       if (column !== sortStore.column) {
         sortStore.column = column;
         sortStore.direction = "desc";
@@ -340,10 +344,14 @@ const TableContent = view(({ spec, sort, limit, className }) => {
               {spec.columns.map((c, i) => {
                 return (
                   <th key={c.key} className={c.className}>
-                    <ButtonLink onClick={() => toggleSort(i)}>
-                      {c.name}
-                      <SortIcon direction={getSortDirection(i)} />
-                    </ButtonLink>
+                    {c.comparator ? (
+                      <ButtonLink onClick={() => toggleSort(i)}>
+                        {c.name}
+                        <SortIcon direction={getSortDirection(i)} />
+                      </ButtonLink>
+                    ) : (
+                      c.name
+                    )}
                   </th>
                 );
               })}
