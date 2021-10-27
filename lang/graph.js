@@ -20,17 +20,18 @@ export function Graph() {
     edgesFromNode.get(from).add({ to: to, payload: payload });
   };
 
-  this.visitDepthFirst = (from, cb, visited = new Set()) => {
+  this.visitDepthFirst = (from, cb, visited = new Set(), payload) => {
     if (visited.has(from)) {
       return;
     }
     checkNodeExists(from);
 
-    cb(from);
-    visited.add(from);
-    edgesFromNode.get(from).forEach(({ to, payload }) => {
-      this.visitDepthFirst(to, cb, visited);
-    });
+    if (cb(from, payload) !== false) {
+      visited.add(from);
+      edgesFromNode.get(from).forEach(({ to, payload }) => {
+        this.visitDepthFirst(to, cb, visited, payload);
+      });
+    }
   };
 
   this.isEmpty = () => {
