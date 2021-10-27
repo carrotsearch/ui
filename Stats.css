@@ -1,6 +1,7 @@
 .Stats {
 }
 
+.Stat.WithDivider,
 .Stats.WithDivider {
   padding-left: 1em;
   border-left: 1px solid var(--border-color);
