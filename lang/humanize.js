@@ -31,8 +31,11 @@ export const humanizeDuration = function (milliseconds) {
   return minutes + "m" + (seconds > 0 ? " " + seconds + "s" : "");
 };
 
-export function pluralize(count, what, includeCount = true) {
-  return (includeCount ? count + " " : " ") + what + (count !== 1 ? "s" : "");
+export function pluralize(count, what, includeCount = true, plural) {
+  const more = count !== 1;
+  return (
+    (includeCount ? count + " " : " ") + (more ? plural || what + "s" : what)
+  );
 }
 
 export function finishingPeriod(string) {
