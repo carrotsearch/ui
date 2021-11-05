@@ -5,18 +5,28 @@ import "./Stats.css";
 import classnames from "classnames";
 import { humanizeCount, pluralize } from "./lang/humanize.js";
 
-export const countStat = ({ count, what, id = "", divider = false }) => {
+export const countStat = ({ count, what, id = "", divider = false, title }) => {
   return {
     id: `${what}:count:${id}`,
     value: humanizeCount(count),
     label: pluralize(count, what, false),
-    divider: divider
+    divider: divider,
+    title: title
   };
 };
 
-export const Stat = ({ value, label, className, divider = false }) => {
+export const Stat = ({
+  value,
+  label,
+  className,
+  divider = false,
+  title = ""
+}) => {
   return (
-    <div className={classnames("Stat", className, { WithDivider: divider })}>
+    <div
+      className={classnames("Stat", className, { WithDivider: divider })}
+      title={title}
+    >
       <strong>{value}</strong>
       <small>{label}</small>
     </div>
