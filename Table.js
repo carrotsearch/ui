@@ -101,7 +101,7 @@ const resolveCellRenderers = spec => {
     if (c.render === "auto") {
       let renderer = cellRenderers.integer;
       let type = "int";
-      for (let i = 0; i < Math.min(spec.rowCount, 10); i++) {
+      for (let i = 0; i < Math.min(spec.rowCount, 50); i++) {
         const v = spec.valueAt(i, j);
         if (Number.isFinite(v)) {
           if (!Number.isInteger(v)) {
