@@ -80,7 +80,7 @@ export const useDynamicTableLimit = (element, getRowsPerPage) => {
 const cellRenderers = {
   toString: v => `${v}`,
   integer: v => `${v}`,
-  float: v => v.toFixed(2)
+  float: v => Number.isFinite(v) ? v.toFixed(2) : ""
 };
 
 const resolveSpec = spec => {
