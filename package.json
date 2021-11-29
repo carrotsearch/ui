@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "dependencies": {
     "@blueprintjs/core": "3.50.4",
+    "@carrotsearch/circles": "2.3.8",
+    "@carrotsearch/foamtree": "3.5.0",
     "@carrotsearch/theme": "0.1.0",
     "@fortawesome/fontawesome-pro": "5.15.4",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
