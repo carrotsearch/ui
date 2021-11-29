@@ -80,7 +80,7 @@ export const useDynamicTableLimit = (element, getRowsPerPage) => {
 const cellRenderers = {
   toString: v => `${v}`,
   integer: v => `${v}`,
-  float: v => Number.isFinite(v) ? v.toFixed(2) : ""
+  float: v => (Number.isFinite(v) ? v.toFixed(2) : "")
 };
 
 const resolveSpec = spec => {
@@ -280,8 +280,16 @@ const usePaging = (spec, limit) => {
 };
 
 const TableContent = view(({ spec, sort, limit, className }) => {
-  const { pageCount, currentPage, first, last, next, prev, set, start } =
-    usePaging(spec, limit);
+  const {
+    pageCount,
+    currentPage,
+    first,
+    last,
+    next,
+    prev,
+    set,
+    start
+  } = usePaging(spec, limit);
 
   const { toggleSort, getSortDirection, indices } = sort;
 

@@ -80,7 +80,7 @@ const Switch = ({ visible, createElement }) => {
     <div
       style={{
         visibility: visible ? "visible" : "hidden",
-        overflow: visible ? "visible": "hidden"
+        overflow: visible ? "visible" : "hidden"
       }}
       className={visible ? "ViewVisible" : "ViewHidden"}
     >
@@ -186,4 +186,3 @@ export const lazyView = component => {
   const Lazy = renderIfNextVisible(props => component(props));
   return view(props => <Lazy {...props} />);
 };
-

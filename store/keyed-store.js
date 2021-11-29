@@ -1,6 +1,5 @@
 import { store } from "@risingstack/react-easy-state";
 
-
 /**
  * Creates a react-easy-state store that drops the state when the key changes.
  * State dropping will cause multiple renders of React components, but with
