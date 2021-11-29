@@ -82,6 +82,7 @@ const Switch = ({ visible, createElement }) => {
         visibility: visible ? "visible" : "hidden",
         overflow: visible ? "visible": "hidden"
       }}
+      className={visible ? "ViewVisible" : "ViewHidden"}
     >
       <SwitchContent visible={visible} createElement={createElement} />
     </div>
