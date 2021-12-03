@@ -13,6 +13,8 @@
 
 .Table tr.Selected td {
   background-color: var(--yellow-background-color);
+  border-top: 2px solid var(--yellow-border-color);
+  border-bottom: 2px solid var(--yellow-border-color);
 }
 
 .Table .SortIcon {
@@ -21,6 +23,13 @@
 
 .Table.SelectionEnabled td {
   cursor: pointer;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+.Table.SelectionEnabled tr:hover td {
+  background-color: var(--yellow-dim-background-color);
+  border-top: 2px solid var(--yellow-dim-border-color);
+  border-bottom: 2px solid var(--yellow-dim-border-color);
 }
 
 .TablePaging button.link {
