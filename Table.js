@@ -62,7 +62,7 @@ export const useDynamicTableLimit = (element, getRowsPerPage) => {
       // occasionally show a scroll slider if some long labels introduce
       // line breaks, but this shouldn't be a problem.
       let minHeight = Number.MAX_VALUE;
-      for (let r of parent.querySelectorAll("tr")) {
+      for (let r of parent.querySelectorAll("tbody tr")) {
         minHeight = Math.min(minHeight, r.getBoundingClientRect().height);
       }
 
