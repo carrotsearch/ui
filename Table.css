@@ -11,8 +11,16 @@
   width: 100%;
 }
 
+.Table tr.Selected td {
+  background-color: var(--yellow-background-color);
+}
+
 .Table .SortIcon {
   margin-left: 0.5em;
+}
+
+.Table.SelectionEnabled td {
+  cursor: pointer;
 }
 
 .TablePaging button.link {
@@ -26,7 +34,7 @@
 .TablePaging .bp3-input {
   width: 3em;
   height: 2em;
-  vertical-align: 0%;
+  vertical-align: 0;
   margin: 0 0.5em;
   text-align: center;
 }

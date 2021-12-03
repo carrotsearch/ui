@@ -279,112 +279,136 @@ const usePaging = (spec, limit) => {
   };
 };
 
-const TableContent = view(({ spec, sort, limit, className }) => {
-  const {
-    pageCount,
-    currentPage,
-    first,
-    last,
-    next,
-    prev,
-    set,
-    start
-  } = usePaging(spec, limit);
+const TableContent = view(
+  ({
+    spec,
+    sort,
+    limit,
+    className,
+    initialSelectionIndex,
+    onSelectionChanged
+  }) => {
+    const { pageCount, currentPage, first, last, next, prev, set, start
+     } = usePaging(spec, limit);
 
-  const { toggleSort, getSortDirection, indices } = sort;
+    const { toggleSort, getSortDirection, indices } = sort;
 
-  const onKeyDown = e => {
-    if (e.target.matches("input")) {
-      return;
+    const selectionEnabled = !!onSelectionChanged;
+    const selection = store({
+      index: initialSelectionIndex
+    });
+
+    const onKeyDown = e => {
+      if (e.target.matches("input")) {
+        return;
+      }
+      switch (e.key) {
+        case "ArrowLeft":
+          if (e.ctrlKey) {
+            first();
+          } else {
+            prev();
+          }
+          break;
+
+        case "ArrowRight":
+          if (e.ctrlKey) {
+            last();
+          } else {
+            next();
+          }
+          break;
+      }
+    };
+
+    const end = Math.min(start + limit, spec.rowCount);
+    const rows = [];
+    for (let i = start; i < end; i++) {
+      const onRowClick = selectionEnabled
+        ? () => {
+            selection.index = i;
+            return onSelectionChanged(i);
+          }
+        : undefined;
+      rows.push(
+        <tr
+          key={i}
+          onClick={onRowClick}
+          className={selection.index === i ? "Selected" : null}
+        >
+          {spec.columns.map((c, j) => {
+            return (
+              <td key={c.key} className={c.className}>
+                {c.render(spec.valueAt(indices[i], j))}
+              </td>
+            );
+          })}
+        </tr>
+      );
     }
-    switch (e.key) {
-      case "ArrowLeft":
-        if (e.ctrlKey) {
-          first();
-        } else {
-          prev();
-        }
-        break;
 
-      case "ArrowRight":
-        if (e.ctrlKey) {
-          last();
-        } else {
-          next();
-        }
-        break;
-    }
-  };
+    return (
+      <>
+        <TablePaging
+          pageCount={pageCount}
+          currentPage={currentPage}
+          onFirst={first}
+          onPrev={prev}
+          onNext={next}
+          onLast={last}
+          onPageChange={set}
+          onKeyDown={onKeyDown}
+        />
 
-  const end = Math.min(start + limit, spec.rowCount);
-  const rows = [];
-  for (let i = start; i < end; i++) {
-    rows.push(
-      <tr key={i}>
-        {spec.columns.map((c, j) => {
-          return (
-            <td key={c.key} className={c.className}>
-              {c.render(spec.valueAt(indices[i], j))}
-            </td>
-          );
-        })}
-      </tr>
+        <div
+          className={classnames("Table", className, {
+            SelectionEnabled: selectionEnabled
+          })}
+        >
+          <table tabIndex={0} onKeyDown={onKeyDown}>
+            <thead>
+              <tr>
+                {spec.columns.map((c, i) => {
+                  return (
+                    <th key={c.key} className={classnames(c.className)}>
+                      {c.comparator ? (
+                        <ButtonLink onClick={() => toggleSort(i)}>
+                          {c.name}
+                          <SortIcon direction={getSortDirection(i)} />
+                        </ButtonLink>
+                      ) : (
+                        c.name
+                      )}
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+
+            <tbody>{rows}</tbody>
+          </table>
+        </div>
+      </>
     );
   }
+);
 
-  return (
-    <>
-      <TablePaging
-        pageCount={pageCount}
-        currentPage={currentPage}
-        onFirst={first}
-        onPrev={prev}
-        onNext={next}
-        onLast={last}
-        onPageChange={set}
-        onKeyDown={onKeyDown}
+export const Table = view(
+  ({ spec, limit, className, initialSelectionIndex, onSelectionChanged }) => {
+    const resolvedSpec = resolveSpec(spec);
+    const sort = useSort(resolvedSpec);
+
+    // Key by spec to drop paging state when the spec changes.
+    return (
+      <TableContent
+        key={spec}
+        spec={resolvedSpec}
+        sort={sort}
+        limit={limit}
+        className={className}
+        initialSelectionIndex={initialSelectionIndex}
+        onSelectionChanged={onSelectionChanged}
       />
-
-      <div className={classnames("Table", className)}>
-        <table tabIndex={0} onKeyDown={onKeyDown}>
-          <thead>
-            <tr>
-              {spec.columns.map((c, i) => {
-                return (
-                  <th key={c.key} className={c.className}>
-                    {c.comparator ? (
-                      <ButtonLink onClick={() => toggleSort(i)}>
-                        {c.name}
-                        <SortIcon direction={getSortDirection(i)} />
-                      </ButtonLink>
-                    ) : (
-                      c.name
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-
-          <tbody>{rows}</tbody>
-        </table>
-      </div>
-    </>
-  );
-});
-
-export const Table = view(({ spec, limit, className }) => {
-  const resolvedSpec = resolveSpec(spec);
-  const sort = useSort(resolvedSpec);
-
-  // Key by spec to drop paging state when the spec changes.
-  return (
-    <TableContent
-      key={spec}
-      spec={resolvedSpec}
-      sort={sort}
-      limit={limit}
-      className={className}
-    />
-  );
-});
+    );
+  }
+);
