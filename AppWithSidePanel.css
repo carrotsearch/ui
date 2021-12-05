@@ -66,7 +66,7 @@
   margin-top: -0.375em;
 }
 
-.AppMain .ViewsTabs,
+.AppMain > .Views > .ViewsTabs,
 .AppMain .stats {
   background-color: var(--background-color-tertiary);
 }

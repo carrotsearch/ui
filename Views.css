@@ -45,3 +45,7 @@
 .view-tool-trigger svg {
   width: 14px;
 }
+
+.ViewHidden .ViewVisible {
+  visibility: hidden !important;
+}
