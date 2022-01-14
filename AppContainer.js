@@ -24,7 +24,7 @@ import {
   PopoverPosition
 } from "@blueprintjs/core";
 
-import { faFrown } from "@fortawesome/pro-regular-svg-icons";
+import { faFrown } from "@fortawesome/pro-regular-svg-icons/faFrown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { errors } from "./store/errors.js";

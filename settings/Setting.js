@@ -4,7 +4,7 @@ import "./Setting.css";
 
 import { FormGroup } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
+import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons/faQuestionCircle";
 import { DescriptionPopover } from "../DescriptionPopover.js";
 import { SearchHighlight } from "../fuzzysearch.js";
 

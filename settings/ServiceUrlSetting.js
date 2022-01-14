@@ -8,7 +8,8 @@ import { store, view } from "@risingstack/react-easy-state";
 
 import { Button, ControlGroup, InputGroup } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlug, faCheck } from "@fortawesome/pro-regular-svg-icons";
+import { faPlug } from "@fortawesome/pro-regular-svg-icons/faPlug";
+import { faCheck } from "@fortawesome/pro-regular-svg-icons/faCheck";
 
 import { Setting } from "./Setting.js";
 import { LogEntry } from "../LogEntries.js";
