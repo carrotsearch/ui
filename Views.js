@@ -80,7 +80,7 @@ const Switch = ({ visible, createElement }) => {
     <div
       style={{
         visibility: visible ? "visible" : "hidden",
-        overflow: visible ? "visible" : "hidden"
+        overflow: visible ? "auto" : "hidden"
       }}
       className={visible ? "ViewVisible" : "ViewHidden"}
     >

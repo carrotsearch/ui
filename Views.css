@@ -16,7 +16,6 @@
 .ViewsContent {
   position: relative;
   grid-area: content;
-  overflow: auto;
 }
 
 .ViewsContent > div {
