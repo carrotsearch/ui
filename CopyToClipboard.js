@@ -2,11 +2,9 @@ import React, { useRef, useState } from "react";
 
 import { Button, Classes } from "@blueprintjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faClipboard,
-  faClipboardCheck,
-  faCross
-} from "@fortawesome/pro-regular-svg-icons";
+import { faClipboard } from "@fortawesome/pro-regular-svg-icons/faClipboard";
+import { faClipboardCheck } from "@fortawesome/pro-regular-svg-icons/faClipboardCheck";
+import { faCross } from "@fortawesome/pro-regular-svg-icons/faCross";
 
 import copyToClipboard from "clipboard-copy";
 

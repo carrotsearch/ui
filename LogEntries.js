@@ -3,10 +3,8 @@ import React from "react";
 import "./LogEntries.css";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faExclamationTriangle,
-  faInfoSquare
-} from "@fortawesome/pro-regular-svg-icons";
+import { faInfoSquare } from "@fortawesome/pro-regular-svg-icons/faInfoSquare";
+import { faExclamationTriangle } from "@fortawesome/pro-regular-svg-icons/faExclamationTriangle";
 import { view } from "@risingstack/react-easy-state";
 
 export const ArrayLogger = function () {

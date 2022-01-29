@@ -9,14 +9,12 @@ import { ButtonLink } from "./ButtonLink.js";
 import { Button, InputGroup } from "@blueprintjs/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCaretDown,
-  faCaretUp,
-  faChevronDoubleLeft,
-  faChevronDoubleRight,
-  faChevronLeft,
-  faChevronRight
-} from "@fortawesome/pro-regular-svg-icons";
+import {faCaretDown} from "@fortawesome/pro-regular-svg-icons/faCaretDown";
+import {faCaretUp} from "@fortawesome/pro-regular-svg-icons/faCaretUp";
+import {faChevronDoubleLeft} from "@fortawesome/pro-regular-svg-icons/faChevronDoubleLeft";
+import {faChevronDoubleRight} from "@fortawesome/pro-regular-svg-icons/faChevronDoubleRight";
+import {faChevronLeft} from "@fortawesome/pro-regular-svg-icons/faChevronLeft";
+import {faChevronRight} from "@fortawesome/pro-regular-svg-icons/faChevronRight";
 
 import { reversedComparator } from "./lang/comparator.js";
 import { insertZWSPAtCamelCase } from "./lang/strings.js";
