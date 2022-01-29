@@ -108,7 +108,7 @@ nav .ThemeSwitch {
   margin: auto;
   max-width: 60vw;
 }
-.AppError svg {
+.AppError > div > svg {
   position: absolute;
   left: -1.5em;
   top: -0.05em;
