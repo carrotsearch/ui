@@ -45,6 +45,25 @@
   width: 14px;
 }
 
+.ViewVisible {
+  visibility: visible;
+}
+
+.ViewVisible.ViewOverflowAuto {
+  overflow: auto;
+}
+.ViewVisible.ViewOverflowVisible {
+  overflow: visible;
+}
+.ViewVisible.ViewOverflowHidden {
+  overflow: hidden;
+}
+
+.ViewHidden {
+  visibility: hidden;
+  overflow: hidden;
+}
+
 .ViewHidden .ViewVisible {
   visibility: hidden !important;
 }

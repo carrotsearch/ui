@@ -64,7 +64,7 @@ const SwitchContent = React.memo(
   }
 );
 
-const Switch = ({ visible, createElement }) => {
+const Switch = ({ visible, createElement, overflow }) => {
   const [initialized, setInitialized] = useState(false);
   useEffect(() => {
     if (visible) {
@@ -78,11 +78,13 @@ const Switch = ({ visible, createElement }) => {
 
   return (
     <div
-      style={{
-        visibility: visible ? "visible" : "hidden",
-        overflow: visible ? "auto" : "hidden"
-      }}
-      className={visible ? "ViewVisible" : "ViewHidden"}
+      className={classNames({
+        ViewVisible: visible,
+        ViewHidden: !visible,
+        ViewOverflowHidden: overflow === "hidden",
+        ViewOverflowVisible: overflow === "visible",
+        ViewOverflowAuto: overflow === "auto"
+      })}
     >
       <SwitchContent visible={visible} createElement={createElement} />
     </div>
@@ -150,6 +152,7 @@ export const Views = ({
           return (
             <Switch
               key={v}
+              overflow={allViews[v].overflow || "auto"}
               visible={v === activeView}
               createElement={allViews[v].createContentElement}
             />
