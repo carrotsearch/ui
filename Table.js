@@ -399,7 +399,7 @@ export const Table = view(
     // Key by spec to drop paging state when the spec changes.
     return (
       <TableContent
-        key={spec}
+        key={spec.rowCount}
         spec={resolvedSpec}
         sort={sort}
         limit={limit}
