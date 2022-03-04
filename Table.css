@@ -33,6 +33,7 @@
 }
 
 .TablePaging button.link {
+  white-space: nowrap;
   width: 2em;
 }
 

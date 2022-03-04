@@ -371,8 +371,7 @@ const TableContent = view(
                     <th key={c.key} className={classnames(c.className)}>
                       {c.comparator ? (
                         <ButtonLink onClick={() => toggleSort(i)}>
-                          {c.name}
-                          <SortIcon direction={getSortDirection(i)} />
+                          {c.name}<SortIcon direction={getSortDirection(i)} />
                         </ButtonLink>
                       ) : (
                         c.name
