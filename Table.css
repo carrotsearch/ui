@@ -9,6 +9,7 @@
   font-weight: bold;
   color: var(--text-color);
   width: 100%;
+  white-space: nowrap;
 }
 
 .Table tr.Selected td {
@@ -33,7 +34,6 @@
 }
 
 .TablePaging button.link {
-  white-space: nowrap;
   width: 2em;
 }
 
