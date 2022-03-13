@@ -9,12 +9,12 @@ import { ButtonLink } from "./ButtonLink.js";
 import { Button, InputGroup } from "@blueprintjs/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCaretDown} from "@fortawesome/pro-regular-svg-icons/faCaretDown";
-import {faCaretUp} from "@fortawesome/pro-regular-svg-icons/faCaretUp";
-import {faChevronDoubleLeft} from "@fortawesome/pro-regular-svg-icons/faChevronDoubleLeft";
-import {faChevronDoubleRight} from "@fortawesome/pro-regular-svg-icons/faChevronDoubleRight";
-import {faChevronLeft} from "@fortawesome/pro-regular-svg-icons/faChevronLeft";
-import {faChevronRight} from "@fortawesome/pro-regular-svg-icons/faChevronRight";
+import { faCaretDown } from "@fortawesome/pro-regular-svg-icons/faCaretDown";
+import { faCaretUp } from "@fortawesome/pro-regular-svg-icons/faCaretUp";
+import { faChevronDoubleLeft } from "@fortawesome/pro-regular-svg-icons/faChevronDoubleLeft";
+import { faChevronDoubleRight } from "@fortawesome/pro-regular-svg-icons/faChevronDoubleRight";
+import { faChevronLeft } from "@fortawesome/pro-regular-svg-icons/faChevronLeft";
+import { faChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
 
 import { reversedComparator } from "./lang/comparator.js";
 import { insertZWSPAtCamelCase } from "./lang/strings.js";
@@ -43,32 +43,37 @@ export const useDynamicTableLimit = (element, getRowsPerPage) => {
   // For now, we only recompute the number of rows per page when table
   // data changes, we don't do it when window size changes.
   const limitStore = store({
-    limit: 25
+    limit: 25,
+    limitSet: false
   });
 
   const rowsPerPage = getRowsPerPage();
   const autoRowsPerPage = rowsPerPage === "auto";
   useLayoutEffect(() => {
-    if (!autoRowsPerPage) {
+    if (!autoRowsPerPage || limitStore.limitSet) {
       return;
     }
 
     const parent = element.current;
     const tableHeight = getHeight(parent, ".Table");
     if (tableHeight) {
-      // Take the minimum row height for the calculations. This may
-      // occasionally show a scroll slider if some long labels introduce
-      // line breaks, but this shouldn't be a problem.
-      let minHeight = Number.MAX_VALUE;
+      // Take the average row height for the calculations. This may
+      // occasionally show a scroll slider, but this shouldn't be a problem.
+      let sumHeight = 0;
+      let count = 0;
       for (let r of parent.querySelectorAll("tbody tr")) {
-        minHeight = Math.min(minHeight, r.getBoundingClientRect().height);
+        sumHeight += r.getBoundingClientRect().height;
+        count++;
       }
 
       // We need to subtract the table header height.
       const headHeight = getHeight(parent, "thead");
 
-      if (minHeight !== Number.MAX_VALUE) {
-        limitStore.limit = Math.floor((tableHeight - headHeight) / minHeight);
+      if (sumHeight !== 0) {
+        limitStore.limit = Math.floor(
+          (tableHeight - headHeight) / (sumHeight / count)
+        );
+        limitStore.limitSet = true;
       }
     }
   });
@@ -286,8 +291,8 @@ const TableContent = view(
     initialSelectionIndex,
     onSelectionChanged
   }) => {
-    const { pageCount, currentPage, first, last, next, prev, set, start
-     } = usePaging(spec, limit);
+    const { pageCount, currentPage, first, last, next, prev, set, start } =
+      usePaging(spec, limit);
 
     const { toggleSort, getSortDirection, indices } = sort;
 
@@ -371,7 +376,8 @@ const TableContent = view(
                     <th key={c.key} className={classnames(c.className)}>
                       {c.comparator ? (
                         <ButtonLink onClick={() => toggleSort(i)}>
-                          {c.name}<SortIcon direction={getSortDirection(i)} />
+                          {c.name}
+                          <SortIcon direction={getSortDirection(i)} />
                         </ButtonLink>
                       ) : (
                         c.name
