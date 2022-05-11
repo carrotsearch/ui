@@ -39,6 +39,9 @@ export function pluralize(count, what, includeCount = true, plural) {
 }
 
 export function finishingPeriod(string) {
+  if (!string) {
+    return string;
+  }
   return string + (string.endsWith(".") ? "" : ".");
 }
 
