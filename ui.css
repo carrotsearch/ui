@@ -101,6 +101,50 @@ table td:not(:last-of-type) {
   background: rgba(255, 255, 255, 0.12);
 }
 
+.SmallScrollbars *::-webkit-scrollbar {
+  width: 0.65em;
+}
+
+.SmallScrollbars *::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.SmallScrollbars *::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.005);
+}
+
+.SmallScrollbars *:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.SmallScrollbars *:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.SmallScrollbars *:hover::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.bp3-dark .SmallScrollbars *::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.bp3-dark .SmallScrollbars *::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.005);
+}
+
+.bp3-dark .SmallScrollbars *:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.bp3-dark .SmallScrollbars *:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.bp3-dark .SmallScrollbars *:hover::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+}
+
 /** BlueprintJS tweaks */
 button.bp3-disabled {
   cursor: pointer !important;
