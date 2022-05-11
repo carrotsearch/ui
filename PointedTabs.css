@@ -3,6 +3,11 @@
   --pointed-tabs-pointer-border-width: 0.0625em;
 }
 
+.AppSide {
+  --tab-border-color: var(--tab-border-color-on-secondary);
+  --tab-background-color: var(--tab-background-color-on-secondary);
+}
+
 .dark .PointedTabs {
   --pointed-tabs-pointer-border-width: calc(var(--pointed-tabs-border-width));
 }
