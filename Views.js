@@ -15,6 +15,7 @@ const ShowHide = props => {
   return (
     <span
       className={props.className}
+      data-tool-id={props.id}
       title={props.title}
       style={props.visible ? {} : { display: "none" }}
     >
@@ -23,7 +24,7 @@ const ShowHide = props => {
   );
 };
 
-export const Tool = ({ tool, visible, props }) => {
+export const Tool = ({ tool, id, visible, props }) => {
   if (tool.icon) {
     return (
       <ToolPopover
@@ -33,6 +34,7 @@ export const Tool = ({ tool, visible, props }) => {
       >
         <ShowHide visible={visible} className="view-tool-trigger">
           <Button
+            data-tool-id={id}
             icon={<FontAwesomeIcon icon={tool.icon} />}
             minimal={true}
             title={tool.title}
@@ -46,6 +48,7 @@ export const Tool = ({ tool, visible, props }) => {
       <ShowHide
         visible={visible}
         className={Classes.FIXED + " view-tool-trigger"}
+        id={id}
         title={tool.title}
       >
         {tool.createContentElement(props)}
@@ -140,7 +143,7 @@ export const Views = ({
             allViews[v].tools.forEach(t => {
               const key = v + "." + t.id;
               tools.push(
-                <Tool key={key} tool={t} visible={activeView === v} />
+                <Tool key={key} id={key} tool={t} visible={activeView === v} />
               );
             });
             return tools;
