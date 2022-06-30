@@ -9,12 +9,12 @@ import { ButtonLink } from "./ButtonLink.js";
 import { Button, InputGroup } from "@blueprintjs/core";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCaretDown} from "@fortawesome/pro-regular-svg-icons/faCaretDown";
-import {faCaretUp} from "@fortawesome/pro-regular-svg-icons/faCaretUp";
-import {faChevronDoubleLeft} from "@fortawesome/pro-regular-svg-icons/faChevronDoubleLeft";
-import {faChevronDoubleRight} from "@fortawesome/pro-regular-svg-icons/faChevronDoubleRight";
-import {faChevronLeft} from "@fortawesome/pro-regular-svg-icons/faChevronLeft";
-import {faChevronRight} from "@fortawesome/pro-regular-svg-icons/faChevronRight";
+import { faCaretDown } from "@fortawesome/pro-regular-svg-icons/faCaretDown";
+import { faCaretUp } from "@fortawesome/pro-regular-svg-icons/faCaretUp";
+import { faChevronDoubleLeft } from "@fortawesome/pro-regular-svg-icons/faChevronDoubleLeft";
+import { faChevronDoubleRight } from "@fortawesome/pro-regular-svg-icons/faChevronDoubleRight";
+import { faChevronLeft } from "@fortawesome/pro-regular-svg-icons/faChevronLeft";
+import { faChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
 
 import { reversedComparator } from "./lang/comparator.js";
 import { insertZWSPAtCamelCase } from "./lang/strings.js";
@@ -100,7 +100,7 @@ const resolveCellRenderers = spec => {
       let renderer = cellRenderers.integer;
       let type = "int";
       for (let i = 0; i < Math.min(spec.rowCount, 50); i++) {
-        const v = spec.valueAt(i, j);
+        const v = c.value(i);
         if (Number.isFinite(v)) {
           if (!Number.isInteger(v)) {
             renderer = cellRenderers.float;
@@ -204,19 +204,19 @@ export const TablePaging = view(
 );
 
 const useSort = spec => {
-  const initialSortColumn = spec.columns.find(c => c.sort && c.sort !== "none");
+  const initialSortColumn = spec.columns.find(
+    c => c.sort && c.comparator && c.sort !== "none"
+  );
   const sortStore = store({
-    column: initialSortColumn
-      ? spec.columns.findIndex(c => c === initialSortColumn)
-      : -1,
+    column: initialSortColumn,
     direction: initialSortColumn?.sort,
-    toggle: column => {
-      if (!spec.columns[column].comparator) {
+    toggle: columnSpec => {
+      if (!columnSpec.comparator) {
         return;
       }
 
-      if (column !== sortStore.column) {
-        sortStore.column = column;
+      if (columnSpec.key !== sortStore.column.key) {
+        sortStore.column = columnSpec;
         sortStore.direction = "desc";
       } else {
         sortStore.direction = sortStore.direction === "desc" ? "asc" : "desc";
@@ -233,21 +233,18 @@ const useSort = spec => {
   for (let i = 0; i < rowCount; i++) {
     indices[i] = i;
   }
-  if (sortColumn >= 0) {
-    let comparator = spec.columns[sortColumn].comparator;
+  if (sortColumn) {
+    let comparator = sortColumn.comparator;
     if (sortDirection === "desc") {
       comparator = reversedComparator(comparator);
     }
     indices.sort((a, b) => {
-      return comparator(
-        spec.valueAt(a, sortColumn),
-        spec.valueAt(b, sortColumn)
-      );
+      return comparator(sortColumn.value(a), sortColumn.value(b));
     });
   }
 
-  const getSortDirection = columnIndex => {
-    return columnIndex === sortColumn ? sortDirection : undefined;
+  const getSortDirection = columnSpec => {
+    return columnSpec?.key === sortColumn?.key ? sortDirection : undefined;
   };
 
   return { toggleSort, getSortDirection, indices };
@@ -286,8 +283,8 @@ const TableContent = view(
     initialSelectionIndex,
     onSelectionChanged
   }) => {
-    const { pageCount, currentPage, first, last, next, prev, set, start
-     } = usePaging(spec, limit);
+    const { pageCount, currentPage, first, last, next, prev, set, start } =
+      usePaging(spec, limit);
 
     const { toggleSort, getSortDirection, indices } = sort;
 
@@ -334,10 +331,10 @@ const TableContent = view(
           onClick={onRowClick}
           className={selection.index === i ? "Selected" : null}
         >
-          {spec.columns.map((c, j) => {
+          {spec.columns.map(c => {
             return (
               <td key={c.key} className={c.className}>
-                {c.render(spec.valueAt(indices[i], j))}
+                {c.render(c.value(indices[i]))}
               </td>
             );
           })}
@@ -366,13 +363,13 @@ const TableContent = view(
           <table tabIndex={0} onKeyDown={onKeyDown}>
             <thead>
               <tr>
-                {spec.columns.map((c, i) => {
+                {spec.columns.map(c => {
                   return (
                     <th key={c.key} className={classnames(c.className)}>
                       {c.comparator ? (
-                        <ButtonLink onClick={() => toggleSort(i)}>
+                        <ButtonLink onClick={() => toggleSort(c)}>
                           {c.name}
-                          <SortIcon direction={getSortDirection(i)} />
+                          <SortIcon direction={getSortDirection(c)} />
                         </ButtonLink>
                       ) : (
                         c.name
