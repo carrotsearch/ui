@@ -205,11 +205,11 @@ export const TablePaging = view(
 
 const useSort = spec => {
   const initialSortColumn = spec.columns.find(
-    c => c.sort && c.comparator && c.sort !== "none"
+    c => c.comparator && c.initialSortOrder
   );
   const sortStore = store({
     column: initialSortColumn,
-    direction: initialSortColumn?.sort,
+    direction: initialSortColumn?.initialSortOrder,
     toggle: columnSpec => {
       if (!columnSpec.comparator) {
         return;
