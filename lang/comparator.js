@@ -8,9 +8,27 @@ export const naturalComparator = (a, b) => {
   }
 };
 
+export const comparatorOnArray = comparator => {
+  return (a, b) => {
+    for (let i = 0; i < a.length; i++) {
+      const result = comparator(a[i], b[i]);
+      if (result !== 0) {
+        return result;
+      }
+    }
+    return 0;
+  };
+};
+
 export const comparatorOn = (fn, comparator) => {
   return (a, b) => {
     return comparator(fn(a), fn(b));
+  };
+};
+
+export const comparatorOnProperty = (prop, comparator) => {
+  return (a, b) => {
+    return comparator(a[prop], b[prop]);
   };
 };
 
