@@ -8,13 +8,26 @@
   text-align: inherit;
   font-weight: bold;
   color: var(--text-color);
-  width: 100%;
+}
+
+.Table th > span:not(:last-child):after,
+.Table th > button:not(:last-child):after {
+  content: "/";
+  margin: 0 0.5em;
+  font-weight: normal;
+  color: var(--text-color-lighter);
+  display: inline-block;
+  text-decoration: none;
 }
 
 .Table tr.Selected td {
   background-color: var(--yellow-background-color);
   border-top: 2px solid var(--yellow-border-color);
   border-bottom: 2px solid var(--yellow-border-color);
+}
+
+.Table .CellGroupMember {
+  margin-bottom: calc(0.5 * var(--leading));
 }
 
 .Table .SortIcon {

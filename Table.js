@@ -20,6 +20,7 @@ import { reversedComparator } from "./lang/comparator.js";
 import { insertZWSPAtCamelCase } from "./lang/strings.js";
 
 import "./Table.css";
+import { reduceToMap } from "./lang/lang.js";
 
 const getHeight = (parent, selector) => {
   if (parent) {
@@ -274,6 +275,42 @@ const usePaging = (spec, limit) => {
   };
 };
 
+const DefaultColumnGroupCell = ({ rowIndex, columns }) => {
+  return (
+    <>
+      {columns.map(column => {
+        if (!column) {
+          throw "Unknown column key: " + key;
+        }
+
+        const rendered = column.render(column.value(rowIndex), columns);
+        if (columns.length > 1) {
+          return (
+            <div key={column.key} className="CellGroupMember">
+              {rendered}
+            </div>
+          );
+        } else {
+          return rendered;
+        }
+      })}
+    </>
+  );
+};
+
+const ColumnHeader = ({ column, sortDirection, toggleSort }) => {
+  if (column.comparator) {
+    return (
+      <ButtonLink onClick={() => toggleSort(column)}>
+        {column.name}
+        <SortIcon direction={sortDirection} />
+      </ButtonLink>
+    );
+  } else {
+    return <span>{column.name}</span>;
+  }
+};
+
 const TableContent = view(
   ({
     spec,
@@ -316,6 +353,9 @@ const TableContent = view(
       }
     };
 
+    const columnGroups =
+      spec.columnGroups || spec.columns.map(c => ({ columns: [c] }));
+
     const end = Math.min(start + limit, spec.rowCount);
     const rows = [];
     for (let i = start; i < end; i++) {
@@ -325,16 +365,32 @@ const TableContent = view(
             return onSelectionChanged(i);
           }
         : undefined;
+
       rows.push(
         <tr
           key={i}
           onClick={onRowClick}
           className={selection.index === i ? "Selected" : null}
         >
-          {spec.columns.map(c => {
+          {columnGroups.map(({ columns, render, className }) => {
+            const rowIndex = indices[i];
+            const columnGroupClassName = className || columns[0].className;
             return (
-              <td key={c.key} className={c.className}>
-                {c.render(c.value(indices[i]))}
+              <td
+                key={columns.map(c => c.key).join("/")}
+                className={columnGroupClassName}
+              >
+                {render ? (
+                  render(
+                    columns.map(column => column.value(rowIndex)),
+                    columns
+                  )
+                ) : (
+                  <DefaultColumnGroupCell
+                    columns={columns}
+                    rowIndex={rowIndex}
+                  />
+                )}
               </td>
             );
           })}
@@ -363,17 +419,26 @@ const TableContent = view(
           <table tabIndex={0} onKeyDown={onKeyDown}>
             <thead>
               <tr>
-                {spec.columns.map(c => {
+                {columnGroups.map(({ columns, name, className }) => {
+                  const columnGroupClassName =
+                    className || columns[0].className;
+
                   return (
-                    <th key={c.key} className={classnames(c.className)}>
-                      {c.comparator ? (
-                        <ButtonLink onClick={() => toggleSort(c)}>
-                          {c.name}
-                          <SortIcon direction={getSortDirection(c)} />
-                        </ButtonLink>
-                      ) : (
-                        c.name
-                      )}
+                    <th
+                      key={columns.map(c => c.key).join("/")}
+                      className={classnames(columnGroupClassName)}
+                    >
+                      {name ||
+                        columns.map(c => {
+                          return (
+                            <ColumnHeader
+                              key={c.key}
+                              column={c}
+                              sortDirection={getSortDirection(c)}
+                              toggleSort={toggleSort}
+                            />
+                          );
+                        })}
                     </th>
                   );
                 })}
