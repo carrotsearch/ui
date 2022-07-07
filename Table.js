@@ -35,7 +35,7 @@ const getHeight = (parent, selector) => {
 /**
  * Computes the number of labels per page to fill the window.
  */
-export const useDynamicTableLimit = (element, getRowsPerPage) => {
+export const useDynamicTableLimit = (element, getRowsPerPage, initialLimit = 25) => {
   // We'll keep the computed number of rows here.
   // The code starts with some reasonable default, performs an initial render
   // with this number of rows to measure row height and then computes the target
@@ -44,13 +44,14 @@ export const useDynamicTableLimit = (element, getRowsPerPage) => {
   // For now, we only recompute the number of rows per page when table
   // data changes, we don't do it when window size changes.
   const limitStore = store({
-    limit: 25
+    limit: initialLimit,
+    limitComputed: false
   });
 
   const rowsPerPage = getRowsPerPage();
   const autoRowsPerPage = rowsPerPage === "auto";
   useLayoutEffect(() => {
-    if (!autoRowsPerPage) {
+    if (!autoRowsPerPage || limitStore.limitComputed) {
       return;
     }
 
@@ -70,6 +71,7 @@ export const useDynamicTableLimit = (element, getRowsPerPage) => {
 
       if (minHeight !== Number.MAX_VALUE) {
         limitStore.limit = Math.floor((tableHeight - headHeight) / minHeight);
+        limitStore.limitComputed = true;
       }
     }
   });
