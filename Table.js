@@ -20,7 +20,6 @@ import { reversedComparator } from "./lang/comparator.js";
 import { insertZWSPAtCamelCase } from "./lang/strings.js";
 
 import "./Table.css";
-import { reduceToMap } from "./lang/lang.js";
 
 const getHeight = (parent, selector) => {
   if (parent) {
@@ -35,7 +34,11 @@ const getHeight = (parent, selector) => {
 /**
  * Computes the number of labels per page to fill the window.
  */
-export const useDynamicTableLimit = (element, getRowsPerPage, initialLimit = 25) => {
+export const useDynamicTableLimit = (
+  element,
+  getRowsPerPage,
+  initialLimit = 25
+) => {
   // We'll keep the computed number of rows here.
   // The code starts with some reasonable default, performs an initial render
   // with this number of rows to measure row height and then computes the target
@@ -84,11 +87,22 @@ const cellRenderers = {
   float: v => (Number.isFinite(v) ? v.toFixed(2) : "")
 };
 
-const resolveSpec = spec => {
-  return resolveCellRenderers(insertZWSP(spec));
+/**
+ * Preprocesses column names for better display, infers column data types,
+ * resolves default renderers. Call this method before passing the table
+ * spec for React or Excel rendering.
+ */
+export const prepareTableSpec = spec => {
+  if (!spec.$prepared) {
+    insertZWSPInColumnNames(spec);
+    inferColumnTypes(spec);
+    resolveCellRenderers(spec);
+    spec.$prepared = true;
+  }
+  return spec;
 };
 
-const insertZWSP = spec => {
+const insertZWSPInColumnNames = spec => {
   spec.columns.forEach(c => {
     if (c.name) {
       c.name = insertZWSPAtCamelCase(c.name);
@@ -99,27 +113,46 @@ const insertZWSP = spec => {
 
 const resolveCellRenderers = spec => {
   spec.columns.forEach((c, j) => {
-    if (c.render === "auto") {
-      let renderer = cellRenderers.integer;
-      let type = "int";
-      for (let i = 0; i < Math.min(spec.rowCount, 50); i++) {
-        const v = c.value(i);
-        if (Number.isFinite(v)) {
-          if (!Number.isInteger(v)) {
-            renderer = cellRenderers.float;
-            type = "float";
-          }
-        } else {
-          renderer = cellRenderers.toString;
-          type = "string";
+    if (!c.render || c.render === "auto") {
+      let renderer;
+      switch (c.$type) {
+        case "int":
+          renderer = cellRenderers.integer;
           break;
-        }
+
+        case "float":
+          renderer = cellRenderers.float;
+          break;
+
+        case "string":
+        default:
+          renderer = cellRenderers.toString;
+          break;
       }
       c.render = renderer;
-      c.type = type;
     }
   });
   return spec;
+};
+
+const inferColumnTypes = spec => {
+  spec.columns.forEach(column => {
+    let type = "int";
+    for (let i = 0; i < Math.min(spec.rowCount, 50); i++) {
+      const v = column.value(i);
+      if (Number.isFinite(v)) {
+        if (!Number.isInteger(v)) {
+          type = "float";
+          break;
+        }
+      } else {
+        type = "string";
+        break;
+      }
+    }
+
+    column.$type = type;
+  });
 };
 
 const SortIcon = ({ direction }) => {
@@ -457,7 +490,7 @@ const TableContent = view(
 
 export const Table = view(
   ({ spec, limit, className, initialSelectionIndex, onSelectionChanged }) => {
-    const resolvedSpec = resolveSpec(spec);
+    const resolvedSpec = prepareTableSpec(spec);
     const sort = useSort(resolvedSpec);
 
     // Key by spec to drop paging state when the spec changes.
