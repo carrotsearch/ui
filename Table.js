@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { Fragment, useLayoutEffect } from "react";
 
 import classnames from "classnames";
 
@@ -326,7 +326,7 @@ const DefaultColumnGroupCell = ({ rowIndex, columns }) => {
             </div>
           );
         } else {
-          return rendered;
+          return <Fragment key={column.key}>{rendered}</Fragment>;
         }
       })}
     </>
