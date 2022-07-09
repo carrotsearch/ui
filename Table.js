@@ -137,6 +137,10 @@ const resolveCellRenderers = spec => {
 
 const inferColumnTypes = spec => {
   spec.columns.forEach(column => {
+    if (column.$type) {
+      return;
+    }
+
     let type = "int";
     for (let i = 0; i < Math.min(spec.rowCount, 50); i++) {
       const v = column.value(i);
@@ -251,7 +255,7 @@ const useSort = spec => {
         return;
       }
 
-      if (columnSpec.key !== sortStore.column.key) {
+      if (!sortStore.column || columnSpec.key !== sortStore.column.key) {
         sortStore.column = columnSpec;
         sortStore.direction = "desc";
       } else {
@@ -336,13 +340,13 @@ const DefaultColumnGroupCell = ({ rowIndex, columns }) => {
 const ColumnHeader = ({ column, sortDirection, toggleSort }) => {
   if (column.comparator) {
     return (
-      <ButtonLink onClick={() => toggleSort(column)}>
+      <ButtonLink onClick={() => toggleSort(column)} title={column.title}>
         {column.name}
         <SortIcon direction={sortDirection} />
       </ButtonLink>
     );
   } else {
-    return <span>{column.name}</span>;
+    return <span title={column.title}>{column.name}</span>;
   }
 };
 

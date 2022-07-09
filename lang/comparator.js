@@ -1,3 +1,20 @@
+export const undefinedLast = comparator => {
+  return (a, b) => {
+    if (a !== undefined && b !== undefined) {
+      return comparator(a, b);
+    }
+    if (a === undefined && b === undefined) {
+      return 0;
+    }
+    if (a === undefined) {
+      return -1;
+    }
+    if (b === undefined) {
+      return 1;
+    }
+  };
+};
+
 export const naturalComparator = (a, b) => {
   if (a < b) {
     return -1;
