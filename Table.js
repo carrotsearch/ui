@@ -257,7 +257,7 @@ const useSort = spec => {
 
       if (!sortStore.column || columnSpec.key !== sortStore.column.key) {
         sortStore.column = columnSpec;
-        sortStore.direction = "desc";
+        sortStore.direction = columnSpec.initialSortDirection || "asc";
       } else {
         sortStore.direction = sortStore.direction === "desc" ? "asc" : "desc";
       }
