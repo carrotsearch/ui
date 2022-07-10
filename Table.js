@@ -248,15 +248,19 @@ const useSort = spec => {
     c => c.comparator && c.initialSortOrder
   );
   const sortStore = store({
-    column: initialSortColumn,
+    // Use column key in the store rather than column instance.
+    // We don't reset sort hook state on spec changes, so if we
+    // kept instances, we'd be using stale column reference after
+    // a spec change.
+    columnKey: initialSortColumn?.key,
     direction: initialSortColumn?.initialSortOrder,
     toggle: columnSpec => {
       if (!columnSpec.comparator) {
         return;
       }
 
-      if (!sortStore.column || columnSpec.key !== sortStore.column.key) {
-        sortStore.column = columnSpec;
+      if (!sortStore.columnKey || columnSpec.key !== sortStore.columnKey) {
+        sortStore.columnKey = columnSpec.key;
         sortStore.direction = columnSpec.initialSortDirection || "asc";
       } else {
         sortStore.direction = sortStore.direction === "desc" ? "asc" : "desc";
@@ -264,7 +268,7 @@ const useSort = spec => {
     }
   });
   const toggleSort = sortStore.toggle;
-  const sortColumn = sortStore.column;
+  const sortColumn = spec.columns.find(c => c.key === sortStore.columnKey) || initialSortColumn;
   const sortDirection = sortStore.direction;
 
   // Sort the data
