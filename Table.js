@@ -268,7 +268,8 @@ const useSort = spec => {
     }
   });
   const toggleSort = sortStore.toggle;
-  const sortColumn = spec.columns.find(c => c.key === sortStore.columnKey) || initialSortColumn;
+  const sortColumn =
+    spec.columns.find(c => c.key === sortStore.columnKey) || initialSortColumn;
   const sortDirection = sortStore.direction;
 
   // Sort the data
