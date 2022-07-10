@@ -171,3 +171,9 @@ button.bp3-disabled {
 :focus {
   outline: var(--outline-color) auto 2px;
 }
+
+.highlight-for-screenshot {
+  box-shadow: 0 0 0 2px var(--red-text-color);
+  background-color: var(--red-background-color);
+  border-radius: 2px;
+}
