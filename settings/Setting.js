@@ -38,7 +38,7 @@ export const LabelWithHelp = ({
 export const SettingDescriptionPopover = ({ description }) => {
   return (
     <DescriptionPopover description={description}>
-      <VscQuestion />
+      <VscQuestion className="HelpIcon VscQuestion" />
     </DescriptionPopover>
   );
 };

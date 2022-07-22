@@ -81,10 +81,6 @@
   bottom: -0.15em;
 }
 
-.TablePaging .bp3-button .DoubleChevronLeft {
-  transform: rotate(90deg);
-  left: -0.06em;
-}
 .TablePaging .bp3-button .DoubleChevronRight {
   transform: rotate(-90deg);
   right: -0.06em;
@@ -93,6 +89,11 @@
 .TablePaging .bp3-button .DoubleChevronRight {
   position: relative;
   bottom: -0.12em;
+}
+.TablePaging .bp3-button .DoubleChevronLeft {
+  transform: rotate(90deg);
+  left: -0.06em;
+  bottom: -0.18em;
 }
 
 .Table table:focus {

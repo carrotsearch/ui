@@ -19,8 +19,7 @@
 .Setting .HelpIcon {
   color: var(--link-icon-color);
   margin-left: 0.25em;
-  margin-bottom: 0.0625em;
-  height: 0.85em;
+  margin-bottom: -0.1em;
   display: inline;
   cursor: pointer;
   opacity: 0.7;

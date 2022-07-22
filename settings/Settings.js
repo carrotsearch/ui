@@ -1,8 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import fuzzysort from "fuzzysort";
-
 import { DeferredGroups, Group } from "./Group.js";
 import { isEmpty } from "../lang/objects.js";
 import { persistentStore } from "../store/persistent-store.js";
