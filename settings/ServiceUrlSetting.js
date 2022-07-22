@@ -7,19 +7,17 @@ import classnames from "classnames";
 import { store, view } from "@risingstack/react-easy-state";
 
 import { Button, ControlGroup, InputGroup } from "@blueprintjs/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlug } from "@fortawesome/pro-regular-svg-icons/faPlug";
-import { faCheck } from "@fortawesome/pro-regular-svg-icons/faCheck";
 
 import { Setting } from "./Setting.js";
 import { LogEntry } from "../LogEntries.js";
+import { VscCheck, VscPlug } from "react-icons/vsc";
 
 export const ConnectButton = view(({ store, onClick }) => {
   const ok = store.status === "ok";
   return (
     <Button
       className={classnames({ ExtraPadding: !ok })}
-      icon={<FontAwesomeIcon icon={ok ? faCheck : faPlug} />}
+      icon={ok ? <VscCheck /> : <VscPlug />}
       intent={ok ? "success" : "none"}
       title={ok ? "Connected" : "Connect to Solr"}
       text={ok ? "" : "Connect"}

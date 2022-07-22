@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import classNames from "classnames";
 import { view } from "@risingstack/react-easy-state";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Classes, ControlGroup, Tab } from "@blueprintjs/core";
 import { PointedTabs } from "./PointedTabs.js";
 import { ToolPopover } from "./ToolPopover.js";
@@ -35,7 +34,13 @@ export const Tool = ({ tool, id, visible, props }) => {
         <ShowHide visible={visible} className="view-tool-trigger">
           <Button
             data-tool-id={id}
-            icon={<FontAwesomeIcon icon={tool.icon} />}
+            icon={
+              tool.icon.prefix ? (
+                <b title="Support for FontAwesome removed">!!!</b>
+              ) : (
+                tool.icon
+              )
+            }
             minimal={true}
             title={tool.title}
           />

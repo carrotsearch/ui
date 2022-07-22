@@ -8,13 +8,13 @@ import { ButtonLink } from "./ButtonLink.js";
 
 import { Button, InputGroup } from "@blueprintjs/core";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/pro-regular-svg-icons/faCaretDown";
-import { faCaretUp } from "@fortawesome/pro-regular-svg-icons/faCaretUp";
-import { faChevronDoubleLeft } from "@fortawesome/pro-regular-svg-icons/faChevronDoubleLeft";
-import { faChevronDoubleRight } from "@fortawesome/pro-regular-svg-icons/faChevronDoubleRight";
-import { faChevronLeft } from "@fortawesome/pro-regular-svg-icons/faChevronLeft";
-import { faChevronRight } from "@fortawesome/pro-regular-svg-icons/faChevronRight";
+import {
+  VscChevronLeft,
+  VscChevronRight,
+  VscFoldDown,
+  VscArrowSmallUp,
+  VscArrowSmallDown
+} from "react-icons/vsc";
 
 import { reversedComparator } from "./lang/comparator.js";
 import { insertZWSPAtCamelCase } from "./lang/strings.js";
@@ -163,20 +163,13 @@ const SortIcon = ({ direction }) => {
   if (!direction) {
     return null;
   }
-
-  let icon;
-  if (direction === "asc") {
-    icon = faCaretUp;
-  } else {
-    icon = faCaretDown;
-  }
-  return <FontAwesomeIcon className="SortIcon" icon={icon} />;
+  return direction === "asc" ? <VscArrowSmallUp /> : <VscArrowSmallDown />;
 };
 
 const PagingButton = ({ icon, onClick }) => {
   return (
     <Button minimal={true} small={true} onClick={onClick}>
-      <FontAwesomeIcon icon={icon} />
+      {icon}
     </Button>
   );
 };
@@ -224,8 +217,14 @@ export const TablePaging = view(
 
     return (
       <div className="TablePaging" onKeyDown={onKeyDown}>
-        <PagingButton onClick={onFirst} icon={faChevronDoubleLeft} />
-        <PagingButton onClick={onPrev} icon={faChevronLeft} />
+        <PagingButton
+          onClick={onFirst}
+          icon={<VscFoldDown className="DoubleChevronLeft" />}
+        />
+        <PagingButton
+          onClick={onPrev}
+          icon={<VscChevronLeft className="SingleChevron" size="1.3em" />}
+        />
         <span>
           page
           <IntegerInput
@@ -236,8 +235,14 @@ export const TablePaging = view(
           of
           <strong>{pageCount}</strong>
         </span>
-        <PagingButton onClick={onNext} icon={faChevronRight} />
-        <PagingButton onClick={onLast} icon={faChevronDoubleRight} />
+        <PagingButton
+          onClick={onNext}
+          icon={<VscChevronRight className="SingleChevron" size="1.3em" />}
+        />
+        <PagingButton
+          onClick={onLast}
+          icon={<VscFoldDown className="DoubleChevronRight" />}
+        />
       </div>
     );
   }

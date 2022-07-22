@@ -6,7 +6,6 @@ import classnames from "classnames";
 
 import { view } from "@risingstack/react-easy-state";
 import { Button } from "@blueprintjs/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const AppSide = ({ logo, button, sideFixed, sideMain }) => {
   return (
@@ -48,7 +47,7 @@ export const AppMainButton = ({ icon, children, ...props }) => {
       className="AppMainButton"
       large={true}
       intent="primary"
-      icon={<FontAwesomeIcon icon={icon} />}
+      icon={icon}
       {...props}
     >
       {children}

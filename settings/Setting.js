@@ -3,8 +3,7 @@ import React from "react";
 import "./Setting.css";
 
 import { FormGroup } from "@blueprintjs/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons/faQuestionCircle";
+import { VscQuestion } from "react-icons/vsc";
 import { DescriptionPopover } from "../DescriptionPopover.js";
 import { SearchHighlight } from "../fuzzysearch.js";
 
@@ -39,7 +38,7 @@ export const LabelWithHelp = ({
 export const SettingDescriptionPopover = ({ description }) => {
   return (
     <DescriptionPopover description={description}>
-      <FontAwesomeIcon className="HelpIcon" icon={faQuestionCircle} />
+      <VscQuestion />
     </DescriptionPopover>
   );
 };

@@ -2,10 +2,8 @@ import React from "react";
 
 import "./LogEntries.css";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoSquare } from "@fortawesome/pro-regular-svg-icons/faInfoSquare";
-import { faExclamationTriangle } from "@fortawesome/pro-regular-svg-icons/faExclamationTriangle";
 import { view } from "@risingstack/react-easy-state";
+import { VscInfo, VscWarning, VscError } from "react-icons/vsc";
 
 export const ArrayLogger = function () {
   const entries = [];
@@ -17,16 +15,16 @@ export const ArrayLogger = function () {
 };
 
 const LEVEL_ICONS = {
-  error: faExclamationTriangle,
-  warning: faExclamationTriangle,
-  info: faInfoSquare
+  error: () => <VscError />,
+  warning: () => <VscWarning />,
+  info: () => <VscInfo />
 };
 
 export const LogEntry = ({ entry }) => {
   const { level, message } = entry;
   return (
     <div className={`LogEntry LogEntry-${level}`}>
-      <FontAwesomeIcon icon={LEVEL_ICONS[level]} /> {message}
+      {LEVEL_ICONS[level]()} {message}
     </div>
   );
 };

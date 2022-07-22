@@ -24,8 +24,7 @@ import {
   PopoverPosition
 } from "@blueprintjs/core";
 
-import { faFrown } from "@fortawesome/pro-regular-svg-icons/faFrown";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { VscError } from "react-icons/vsc";
 
 import { errors } from "./store/errors.js";
 import { ThemeSwitch } from "./ThemeSwitch.js";
@@ -96,11 +95,7 @@ const NavLinkContent = ({
       isOpen={open}
       popoverClassName="NavPopover"
     >
-      {React.isValidElement(icon) ? (
-        icon
-      ) : (
-        <FontAwesomeIcon icon={icon} size="2x" />
-      )}
+      {React.isValidElement(icon) ? icon : null}
       <div>
         <h3>{title}</h3>
         {children}
@@ -193,7 +188,7 @@ export const AppErrorContent = ({ children }) => {
 
   return (
     <div>
-      <FontAwesomeIcon icon={faFrown} size="2x" />
+      <VscError size="2em" />
       {children}
 
       <div className="AppErrorButtons">

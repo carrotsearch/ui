@@ -1,10 +1,7 @@
 import React, { useRef, useState } from "react";
 
 import { Button, Classes } from "@blueprintjs/core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClipboard } from "@fortawesome/pro-regular-svg-icons/faClipboard";
-import { faClipboardCheck } from "@fortawesome/pro-regular-svg-icons/faClipboardCheck";
-import { faCross } from "@fortawesome/pro-regular-svg-icons/faCross";
+import { VscClippy, VscCheck, VscClose } from "react-icons/vsc";
 
 import copyToClipboard from "clipboard-copy";
 
@@ -41,21 +38,21 @@ export const CopyToClipboard = ({
   switch (copyStatus) {
     case "success":
       iconProps = {
-        icon: <FontAwesomeIcon icon={faClipboardCheck} />,
+        icon: <VscCheck />,
         intent: "success",
         text: "Copied"
       };
       break;
     case "error":
       iconProps = {
-        icon: <FontAwesomeIcon icon={faCross} />,
+        icon: <VscClose />,
         intent: "error",
         text: "Couldn't copy"
       };
       break;
     default:
       iconProps = {
-        icon: <FontAwesomeIcon icon={faClipboard} />,
+        icon: <VscClippy />,
         text: buttonText,
         title: "Copy to clipboard"
       };

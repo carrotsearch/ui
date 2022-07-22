@@ -110,7 +110,7 @@ nav .ThemeSwitch {
 }
 .AppError > div > svg {
   position: absolute;
-  left: -1.5em;
+  left: -3em;
   top: -0.05em;
 }
 .AppError .AppErrorButtons {

@@ -76,6 +76,24 @@
 .TablePaging .bp3-button {
   color: var(--text-color-lightest);
 }
+.TablePaging .bp3-button .SingleChevron {
+  position: relative;
+  bottom: -0.15em;
+}
+
+.TablePaging .bp3-button .DoubleChevronLeft {
+  transform: rotate(90deg);
+  left: -0.06em;
+}
+.TablePaging .bp3-button .DoubleChevronRight {
+  transform: rotate(-90deg);
+  right: -0.06em;
+}
+.TablePaging .bp3-button .DoubleChevronLeft,
+.TablePaging .bp3-button .DoubleChevronRight {
+  position: relative;
+  bottom: -0.12em;
+}
 
 .Table table:focus {
   outline: none;
