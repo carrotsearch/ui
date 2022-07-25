@@ -369,8 +369,16 @@ const TableContent = view(
     initialSelectionIndex,
     onSelectionChanged
   }) => {
-    const { pageCount, currentPage, first, last, next, prev, set, start } =
-      usePaging(spec, limit);
+    const {
+      pageCount,
+      currentPage,
+      first,
+      last,
+      next,
+      prev,
+      set,
+      start
+    } = usePaging(spec, limit);
 
     const { toggleSort, getSortDirection, indices } = sort;
 

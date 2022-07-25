@@ -67,8 +67,11 @@ export const NumericSettingSimple = view(({ setting, get, set, search }) => {
   const inputStepRaw = step !== undefined ? step : range / 100;
   const inputStep = clampWhenInteger(ceil125(inputStepRaw), integer);
 
-  const { stringValue, setStringValue, onNumberValueChange } =
-    useNumberSettingHeuristics(setting, set, inputStep, value);
+  const {
+    stringValue,
+    setStringValue,
+    onNumberValueChange
+  } = useNumberSettingHeuristics(setting, set, inputStep, value);
 
   // Parse string into a float when the focus leaves the input box.
   const commitStringValue = () =>
@@ -135,8 +138,11 @@ export const NumericSetting = view(({ setting, get, set, search }) => {
       v === min || v === max ? boundsLabelPrecision : valueLabelPrecision
     );
 
-  const { stringValue, setStringValue, onNumberValueChange } =
-    useNumberSettingHeuristics(setting, set, inputStep, value);
+  const {
+    stringValue,
+    setStringValue,
+    onNumberValueChange
+  } = useNumberSettingHeuristics(setting, set, inputStep, value);
 
   // Parse string into a float when the focus leaves the input box.
   const commitStringValue = () => {

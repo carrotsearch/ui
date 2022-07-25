@@ -51,8 +51,12 @@ export const DeferredGroups = view(({ timeout, setting, ...props }) => {
 });
 
 export const Group = view(({ setting, get, set, className, search }) => {
-  const { label, labelSearchTarget, description, descriptionSearchTarget } =
-    setting;
+  const {
+    label,
+    labelSearchTarget,
+    description,
+    descriptionSearchTarget
+  } = setting;
 
   // We handle visibility of settings and groups by hiding the corresponding elements
   // rather than by removing/adding them to the DOM. The former is much faster.
