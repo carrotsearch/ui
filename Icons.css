@@ -1,5 +1,6 @@
 /** react-icon tweaks */
-.VscSave, .VscScreenFull {
+.VscSave,
+.VscScreenFull {
   position: relative;
   bottom: -0.1em;
   left: -0.05em;
