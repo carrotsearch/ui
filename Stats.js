@@ -15,6 +15,21 @@ export const countStat = ({ count, what, id = "", divider = false, title }) => {
   };
 };
 
+const StatValue = ({ value }) => {
+  if (typeof value === "string") {
+    if (value.endsWith("%")) {
+      return (
+        <strong>
+          {value.substring(0, value.length - 1)}
+          <small className="percent">%</small>
+        </strong>
+      );
+    }
+  }
+
+  return <strong>{value}</strong>;
+};
+
 export const Stat = ({
   value,
   label,
@@ -27,7 +42,7 @@ export const Stat = ({
       className={classnames("Stat", className, { WithDivider: divider })}
       title={title}
     >
-      <strong>{value}</strong>
+      <StatValue value={value} />
       <small>{label}</small>
     </div>
   );
