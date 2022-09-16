@@ -17,7 +17,11 @@ export const humanizeDuration = function (milliseconds) {
 
   // Below one second
   if (milliseconds < 1000) {
-    return milliseconds + "ms";
+    if (milliseconds == 0) {
+      return "< 1 ms";
+    } else {
+      return milliseconds + "ms";
+    }
   }
 
   // Below one minute
