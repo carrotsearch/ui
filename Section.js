@@ -6,7 +6,7 @@ import { view } from "@risingstack/react-easy-state";
 import classnames from "classnames";
 import { displayNoneIf } from "./Optional.js";
 
-export const SectionDivider = ({ label, folded, onHeaderClick = () => {} }) => {
+export const SectionDivider = ({ label, folded, onHeaderClick }) => {
   if (!label) {
     return null;
   }
@@ -15,7 +15,9 @@ export const SectionDivider = ({ label, folded, onHeaderClick = () => {} }) => {
     <h4 className="SectionDivider">
       <span onClick={onHeaderClick}>
         {label}
-        <span className={classnames("Caret", { CaretRight: folded })} />
+        {onHeaderClick ? (
+          <span className={classnames("Caret", { CaretRight: folded })} />
+        ) : null}
       </span>
     </h4>
   );
