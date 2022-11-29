@@ -63,8 +63,12 @@ export const NumericSettingSimple = view(({ setting, get, set, search }) => {
 
   const value = get(setting);
 
-  const range = max - min;
-  const inputStepRaw = step !== undefined ? step : range / 100;
+  const inputStepRaw =
+    step !== undefined
+      ? step
+      : min !== undefined && max !== undefined
+      ? (min - max) / 100
+      : 1;
   const inputStep = clampWhenInteger(ceil125(inputStepRaw), integer);
 
   const { stringValue, setStringValue, onNumberValueChange } =
