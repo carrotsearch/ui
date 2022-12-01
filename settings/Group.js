@@ -16,6 +16,7 @@ import { displayNoneIf } from "../Optional.js";
 import { DeferredPlaceholder } from "../Deferred.js";
 
 import { checkSearchMatch, SearchHighlight } from "../fuzzysearch.js";
+import { StringArrayTextAreaSetting } from "./StringArrayTextAreaSetting";
 
 const isSettingVisible = (s, arg) =>
   (!s.visible || s.visible(arg)) && (!s.enabled || s.enabled());
@@ -127,9 +128,23 @@ const factories = {
   },
 
   "string-array": (s, get, set, search) => {
-    return (
-      <StringArraySetting setting={s} get={get} set={set} search={search} />
-    );
+    switch (s.ui) {
+      case "textarea":
+        return (
+          <StringArrayTextAreaSetting
+            setting={s}
+            get={get}
+            set={set}
+            search={search}
+          />
+        );
+
+      case "tags":
+      default:
+        return (
+          <StringArraySetting setting={s} get={get} set={set} search={search} />
+        );
+    }
   },
 
   enum: (s, get, set, search) => {
