@@ -4,7 +4,7 @@ import "./NumericSetting.css";
 
 import { view } from "@risingstack/react-easy-state";
 
-import { FormGroup, NumericInput, Slider } from "@blueprintjs/core";
+import { FormGroup, ControlGroup, NumericInput, Slider } from "@blueprintjs/core";
 
 import { ceil125, decimalPlaces } from "../lang/math.js";
 import { Setting } from "./Setting.js";
@@ -58,7 +58,7 @@ const useNumberSettingHeuristics = (setting, set, inputStep, initialValue) => {
  * A setting for spinner-based editing of a numeric value. This variant is useful
  * for editing parameters for which minimum or maximum value is not specified.
  */
-export const NumericSettingSimple = view(({ setting, get, set, search }) => {
+export const NumericSettingSimple = view(({ setting, get, set, search, children }) => {
   const { label, description, min, max, step, integer } = setting;
 
   const value = get(setting);
@@ -88,7 +88,7 @@ export const NumericSettingSimple = view(({ setting, get, set, search }) => {
       labelSearchTarget={setting.labelSearchTarget}
       search={search}
     >
-      <FormGroup inline={true} fill={true} className="NumericSettingControls">
+      <FormGroup inline={true} fill={false} className="NumericSettingControls">
         <NumericInput
           onBlur={commitStringValue}
           onButtonClick={onSpinnerValueChange}
@@ -102,6 +102,7 @@ export const NumericSettingSimple = view(({ setting, get, set, search }) => {
           majorStepSize={inputStep}
           clampValueOnBlur={true}
         />
+        {children}
       </FormGroup>
     </Setting>
   );

@@ -1,12 +1,14 @@
 .NumericSetting .bp3-numeric-input > .bp3-input-group {
   max-width: 4.5em;
 }
+.NumericSettingSimple .bp3-numeric-input > .bp3-button-group,
 .NumericSetting .bp3-numeric-input > .bp3-button-group {
   height: 30px;
 }
 .NumericSetting .NumericSettingControls {
   margin-bottom: 0;
 }
+.NumericSettingSimple .NumericSettingControls > .bp3-form-content,
 .NumericSetting .NumericSettingControls > .bp3-form-content {
   display: flex;
   width: 100%;
@@ -25,4 +27,8 @@
 }
 .NumericSetting .bp3-slider-handle:not(.bp3-active) .bp3-slider-label {
   display: none;
+}
+
+.NumericSettingSimple .bp3-numeric-input {
+  margin-right: 1rem;
 }
