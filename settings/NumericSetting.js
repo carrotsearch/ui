@@ -4,7 +4,12 @@ import "./NumericSetting.css";
 
 import { view } from "@risingstack/react-easy-state";
 
-import { FormGroup, ControlGroup, NumericInput, Slider } from "@blueprintjs/core";
+import {
+  FormGroup,
+  ControlGroup,
+  NumericInput,
+  Slider
+} from "@blueprintjs/core";
 
 import { ceil125, decimalPlaces } from "../lang/math.js";
 import { Setting } from "./Setting.js";
@@ -58,55 +63,62 @@ const useNumberSettingHeuristics = (setting, set, inputStep, initialValue) => {
  * A setting for spinner-based editing of a numeric value. This variant is useful
  * for editing parameters for which minimum or maximum value is not specified.
  */
-export const NumericSettingSimple = view(({ setting, get, set, search, children }) => {
-  const { label, description, min, max, step, integer } = setting;
+export const NumericSettingSimple = view(
+  ({ setting, get, set, search, spinnerEnabled = true, children }) => {
+    const { label, description, min, max, step, integer } = setting;
 
-  const value = get(setting);
+    const value = get(setting);
 
-  const inputStepRaw =
-    step !== undefined
-      ? step
-      : min !== undefined && max !== undefined
-      ? (min - max) / 100
-      : 1;
-  const inputStep = clampWhenInteger(ceil125(inputStepRaw), integer);
+    const inputStepRaw =
+      step !== undefined
+        ? step
+        : min !== undefined && max !== undefined
+        ? (min - max) / 100
+        : 1;
+    const inputStep = clampWhenInteger(ceil125(inputStepRaw), integer);
 
-  const { stringValue, setStringValue, onNumberValueChange } =
-    useNumberSettingHeuristics(setting, set, inputStep, value);
+    const { stringValue, setStringValue, onNumberValueChange } =
+      useNumberSettingHeuristics(setting, set, inputStep, value);
 
-  // Parse string into a float when the focus leaves the input box.
-  const commitStringValue = () =>
-    onNumberValueChange(parseFloat(stringValue), 1);
+    // Parse string into a float when the focus leaves the input box.
+    const commitStringValue = () =>
+      onNumberValueChange(parseFloat(stringValue), 1);
 
-  const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
+    const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
 
-  return (
-    <Setting
-      className="NumericSettingSimple"
-      label={label}
-      description={description}
-      labelSearchTarget={setting.labelSearchTarget}
-      search={search}
-    >
-      <FormGroup inline={true} fill={false} className="NumericSettingControls">
-        <NumericInput
-          onBlur={commitStringValue}
-          onButtonClick={onSpinnerValueChange}
-          value={stringValue}
-          onValueChange={(v, vs) => setStringValue(vs)}
+    return (
+      <Setting
+        className="NumericSettingSimple"
+        label={label}
+        description={description}
+        labelSearchTarget={setting.labelSearchTarget}
+        search={search}
+      >
+        <FormGroup
+          inline={true}
           fill={false}
-          min={min}
-          max={max}
-          stepSize={inputStep}
-          minorStepSize={inputStep}
-          majorStepSize={inputStep}
-          clampValueOnBlur={true}
-        />
-        {children}
-      </FormGroup>
-    </Setting>
-  );
-});
+          className="NumericSettingControls"
+        >
+          <NumericInput
+            onBlur={commitStringValue}
+            onButtonClick={onSpinnerValueChange}
+            value={stringValue}
+            onValueChange={(v, vs) => setStringValue(vs)}
+            fill={false}
+            min={min}
+            max={max}
+            stepSize={inputStep}
+            minorStepSize={inputStep}
+            majorStepSize={inputStep}
+            clampValueOnBlur={true}
+            disabled={!spinnerEnabled}
+          />
+          {children}
+        </FormGroup>
+      </Setting>
+    );
+  }
+);
 
 /**
  * A setting for spinner- and slider-based editing of a single numeric value.
