@@ -17,6 +17,7 @@ import { DeferredPlaceholder } from "../Deferred.js";
 
 import { checkSearchMatch, SearchHighlight } from "../fuzzysearch.js";
 import { StringArrayTextAreaSetting } from "./StringArrayTextAreaSetting";
+import { StringArrayMultiselectSetting } from "./StringArrayMultiselectSetting";
 
 const isSettingVisible = (s, arg) =>
   (!s.visible || s.visible(arg)) && (!s.enabled || s.enabled());
@@ -132,6 +133,16 @@ const factories = {
       case "textarea":
         return (
           <StringArrayTextAreaSetting
+            setting={s}
+            get={get}
+            set={set}
+            search={search}
+          />
+        );
+
+      case "multiselect":
+        return (
+          <StringArrayMultiselectSetting
             setting={s}
             get={get}
             set={set}

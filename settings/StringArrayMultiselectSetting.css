@@ -1,0 +1,6 @@
+.StringArrayMultiselectSetting > div {
+  max-height: 12rem;
+  overflow-y: auto;
+  margin-left: -5px;
+  padding-left: 5px;
+}
