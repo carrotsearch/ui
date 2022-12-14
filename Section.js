@@ -1,27 +1,12 @@
 import React from "react";
 
-import "./Section.css";
-
 import { view } from "@risingstack/react-easy-state";
 import classnames from "classnames";
+
 import { displayNoneIf } from "./Optional.js";
+import { SectionDivider } from "./SectionDivider";
 
-export const SectionDivider = ({ label, folded, onHeaderClick }) => {
-  if (!label) {
-    return null;
-  }
-
-  return (
-    <h4 className="SectionDivider">
-      <span onClick={onHeaderClick}>
-        {label}
-        {onHeaderClick ? (
-          <span className={classnames("Caret", { CaretRight: folded })} />
-        ) : null}
-      </span>
-    </h4>
-  );
-};
+import "./Section.css";
 
 export const Section = view(
   ({ label, children, className, style, folded, onHeaderClick }) => {
