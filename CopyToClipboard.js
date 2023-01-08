@@ -4,12 +4,11 @@ import { Button, Classes } from "@blueprintjs/core";
 import { VscClippy, VscCheck, VscClose } from "react-icons/vsc";
 
 import copyToClipboard from "clipboard-copy";
+import { ButtonLink } from "./ButtonLink.js";
 
-export const CopyToClipboard = ({
-  contentProvider,
-  buttonText = "Copy to clipboard",
-  buttonProps = { small: true, minimal: true }
-}) => {
+import "./CopyToClipboard.css";
+
+const useCopy = contentProvider => {
   const [copyStatus, setCopyStatus] = useState("none");
   const timeout = useRef();
 
@@ -33,6 +32,50 @@ export const CopyToClipboard = ({
       timeout.current = undefined;
     }, 1000);
   };
+
+  return [copy, copyStatus];
+};
+
+const CopyStatusInline = ({ copyStatus }) => {
+  switch (copyStatus) {
+    case "success":
+      return (
+        <span className="CopyStatusInline">
+          (<VscCheck /> copied)
+        </span>
+      );
+    case "error":
+      return (
+        <span className="CopyStatusInline">
+          (<VscClose /> couldn't copy)
+        </span>
+      );
+
+    default:
+      return null;
+  }
+};
+
+export const CopyToClipboardLink = ({
+  contentProvider,
+  text = "Copy to clipboard"
+}) => {
+  const [copy, copyStatus] = useCopy(contentProvider);
+
+  return (
+    <>
+      <ButtonLink onClick={copy}>{text}</ButtonLink>
+      <CopyStatusInline copyStatus={copyStatus} />
+    </>
+  );
+};
+
+export const CopyToClipboard = ({
+  contentProvider,
+  buttonText = "Copy to clipboard",
+  buttonProps = { small: true, minimal: true }
+}) => {
+  const [copy, copyStatus] = useCopy(contentProvider);
 
   let iconProps;
   switch (copyStatus) {
