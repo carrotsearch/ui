@@ -67,3 +67,7 @@
 .ViewHidden .ViewVisible {
   visibility: hidden !important;
 }
+
+.ViewError h1 {
+  font-size: 1rem;
+}

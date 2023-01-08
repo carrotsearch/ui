@@ -115,7 +115,8 @@ export const Views = ({
   className,
   activeView,
   onViewChange,
-  children
+  children,
+  ErrorBoundary = ViewErrorBoundary
 }) => {
   // Flatten views from all groups into a single object.
   const allViews = flattenViews(views);
@@ -162,7 +163,13 @@ export const Views = ({
               key={v}
               overflow={allViews[v].overflow || "auto"}
               visible={v === activeView}
-              createElement={allViews[v].createContentElement}
+              createElement={visible =>
+                React.createElement(
+                  ErrorBoundary,
+                  { view: v },
+                  allViews[v].createContentElement(visible)
+                )
+              }
             />
           );
         })}
@@ -197,3 +204,31 @@ export const lazyView = component => {
   const Lazy = renderIfNextVisible(props => component(props));
   return view(props => <Lazy {...props} />);
 };
+
+class ViewErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true, error: error };
+  }
+
+  componentDidCatch(error, errorInfo) {}
+
+  render() {
+    if (this.state.hasError) {
+      const e = this.state.error;
+      return (
+        <div className="ViewError">
+          <h1>An error has occurred in the {this.props.view} view.</h1>
+          <pre>{e.stack}</pre>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}

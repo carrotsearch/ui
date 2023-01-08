@@ -46,6 +46,11 @@ kbd {
   background-color: var(--kbd-background-color);
 }
 
+pre {
+  margin: 0;
+  line-height: 1.1;
+}
+
 code {
   background-color: var(--text-highlight-background-color);
   border: 1px solid var(--text-highlight-border-color);
