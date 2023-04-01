@@ -14,3 +14,5 @@ export const reduceToMap = (array, keyFn, valueFn = e => e) => {
     return map;
   }, new Map());
 };
+
+export const isDefined = v => v !== null && v !== undefined;
