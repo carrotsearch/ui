@@ -27,8 +27,14 @@
   margin-right: 0.25em;
 }
 .PointedTabs > .bp3-tab-list > .TabGroupLabel {
-  margin-right: 0.5em;
+  margin-left: 1em;
+  margin-right: 0em;
   color: var(--text-color-lighter);
+}
+.PointedTabs > .bp3-tab-list > .TabGroupLabel:after {
+  content: "▸";
+  margin-left: 0em;
+  opacity: 0.8;
 }
 .PointedTabs > .bp3-tab-list > .bp3-tab[aria-selected="true"] {
   box-shadow: var(--tab-accent-color) 0 2px 0 inset !important;
