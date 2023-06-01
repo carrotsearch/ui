@@ -508,9 +508,11 @@ export const Table = view(
     const sort = useSort(resolvedSpec);
 
     // Key by spec to drop paging state when the spec changes.
+    // We use JSON.stringify() to extract plain-typed properties for the key.
+    // This should do the job in all cases I can think of.
     return (
       <TableContent
-        key={spec}
+        key={JSON.stringify(spec)}
         spec={resolvedSpec}
         sort={sort}
         limit={limit}
