@@ -19,7 +19,6 @@ import {
 
 import {
   Button,
-  Popover,
   PopoverInteractionKind,
   PopoverPosition
 } from "@blueprintjs/core";
