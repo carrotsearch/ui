@@ -169,17 +169,24 @@ export const AppContainerInternal = ({
   );
 };
 
-export const App = ({ path, component, icon, title, children }) => {
-  return component ? (
-    <AppLink to={path} title={title} icon={icon}>
-      {children}
-    </AppLink>
-  ) : (
-    <NavExternalLink href={path} icon={icon} title={title}>
-      {children}
-    </NavExternalLink>
-  );
-};
+export const App = view(
+  ({ path, component, isVisible, icon, title, children }) => {
+    const visible = isVisible ? isVisible() : true;
+    if (!visible) {
+      return null;
+    }
+
+    return component ? (
+      <AppLink to={path} title={title} icon={icon}>
+        {children}
+      </AppLink>
+    ) : (
+      <NavExternalLink href={path} icon={icon} title={title}>
+        {children}
+      </NavExternalLink>
+    );
+  }
+);
 
 export const AppErrorContent = ({ children }) => {
   if (!children) {
