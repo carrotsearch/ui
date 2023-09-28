@@ -2,7 +2,7 @@
   padding: var(--leading);
 }
 
-.ToolPopover h4 {
+.ToolPopover h4:not(.SectionDivider) {
   border-bottom: 1px solid var(--hr-color);
   padding-bottom: var(--leading);
   margin-bottom: var(--leading);
