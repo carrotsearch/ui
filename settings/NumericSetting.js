@@ -4,12 +4,7 @@ import "./NumericSetting.css";
 
 import { view } from "@risingstack/react-easy-state";
 
-import {
-  FormGroup,
-  ControlGroup,
-  NumericInput,
-  Slider
-} from "@blueprintjs/core";
+import { FormGroup, NumericInput, Slider, InputGroup } from "@blueprintjs/core";
 
 import { ceil125, decimalPlaces } from "../lang/math.js";
 import { Setting } from "./Setting.js";
@@ -63,7 +58,7 @@ const useNumberSettingHeuristics = (setting, set, inputStep, initialValue) => {
  * A setting for spinner-based editing of a numeric value. This variant is useful
  * for editing parameters for which minimum or maximum value is not specified.
  */
-export const NumericSettingSimple = view(
+export const SpinnerNumericSetting = view(
   ({ setting, get, set, search, spinnerEnabled = true, children }) => {
     const { label, description, min, max, step, integer } = setting;
 
@@ -119,87 +114,138 @@ export const NumericSettingSimple = view(
     );
   }
 );
+export const NumericSettingSimple = SpinnerNumericSetting; // for backward-compatibility
 
 /**
  * A setting for spinner- and slider-based editing of a single numeric value.
  * This component applies a number of heuristics to make the experience smooth,
  * including automatic value step computation.
  */
-export const NumericSetting = view(({ setting, get, set, search }) => {
-  const { label, description, min, max, step, integer, onRelease } = setting;
-  const value = get(setting);
+export const SpinnerAndSliderNumericSetting = view(
+  ({ setting, get, set, search }) => {
+    const { label, description, min, max, step, integer, onRelease } = setting;
+    const value = get(setting);
 
-  const range = max - min;
+    const range = max - min;
 
-  // Compute the value step to be a multiple of 1, 2 or 5.
-  const inputStepRaw = step !== undefined ? step : range / 100;
-  const sliderStepRaw = step !== undefined ? step : range / 20;
+    // Compute the value step to be a multiple of 1, 2 or 5.
+    const inputStepRaw = step !== undefined ? step : range / 100;
+    const sliderStepRaw = step !== undefined ? step : range / 20;
 
-  const inputStep = clampWhenInteger(ceil125(inputStepRaw), integer);
-  const sliderStep = clampWhenInteger(ceil125(sliderStepRaw), integer);
+    const inputStep = clampWhenInteger(ceil125(inputStepRaw), integer);
+    const sliderStep = clampWhenInteger(ceil125(sliderStepRaw), integer);
 
-  // Compute the number of decimal places we need for display.
-  const boundsLabelPrecision = Math.max(decimalPlaces(min), decimalPlaces(max));
-  const valueLabelPrecision = decimalPlaces(sliderStep);
-
-  const doOnRelease = () => {
-    onRelease && onRelease();
-  };
-
-  // Render bounds without decimal places, if possible.
-  const sliderLabelRenderer = v =>
-    (v * 1.0).toFixed(
-      v === min || v === max ? boundsLabelPrecision : valueLabelPrecision
+    // Compute the number of decimal places we need for display.
+    const boundsLabelPrecision = Math.max(
+      decimalPlaces(min),
+      decimalPlaces(max)
     );
+    const valueLabelPrecision = decimalPlaces(sliderStep);
 
-  const { stringValue, setStringValue, onNumberValueChange } =
-    useNumberSettingHeuristics(setting, set, inputStep, value);
+    const doOnRelease = () => {
+      onRelease && onRelease();
+    };
 
-  // Parse string into a float when the focus leaves the input box.
-  const commitStringValue = () => {
-    onNumberValueChange(parseFloat(stringValue), 1);
-    doOnRelease();
-  };
+    // Render bounds without decimal places, if possible.
+    const sliderLabelRenderer = v =>
+      (v * 1.0).toFixed(
+        v === min || v === max ? boundsLabelPrecision : valueLabelPrecision
+      );
 
-  const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
-  const onSliderValueChange = v => onNumberValueChange(v, sliderStep);
+    const { stringValue, setStringValue, onNumberValueChange } =
+      useNumberSettingHeuristics(setting, set, inputStep, value);
 
-  const v = Math.max(Math.min(value, max), min);
+    // Parse string into a float when the focus leaves the input box.
+    const commitStringValue = () => {
+      onNumberValueChange(parseFloat(stringValue), 1);
+      doOnRelease();
+    };
 
-  return (
-    <Setting
-      className="NumericSetting"
-      label={label}
-      description={description}
-      labelSearchTarget={setting.labelSearchTarget}
-      search={search}
-    >
-      <FormGroup inline={true} fill={true} className="NumericSettingControls">
-        <NumericInput
-          onBlur={commitStringValue}
-          onButtonClick={onSpinnerValueChange}
-          value={stringValue}
-          onValueChange={(v, vs) => setStringValue(vs)}
+    const onSpinnerValueChange = v => onNumberValueChange(v, inputStep);
+    const onSliderValueChange = v => onNumberValueChange(v, sliderStep);
+
+    const v = Math.max(Math.min(value, max), min);
+
+    return (
+      <Setting
+        className="NumericSetting"
+        label={label}
+        description={description}
+        labelSearchTarget={setting.labelSearchTarget}
+        search={search}
+      >
+        <FormGroup inline={true} fill={true} className="NumericSettingControls">
+          <NumericInput
+            onBlur={commitStringValue}
+            onButtonClick={onSpinnerValueChange}
+            value={stringValue}
+            onValueChange={(v, vs) => setStringValue(vs)}
+            fill={false}
+            min={min}
+            max={max}
+            stepSize={inputStep}
+            minorStepSize={inputStep}
+            majorStepSize={inputStep}
+            clampValueOnBlur={true}
+          />
+          <Slider
+            value={v}
+            onChange={onSliderValueChange}
+            onRelease={doOnRelease}
+            fill={false}
+            min={min}
+            max={max}
+            stepSize={sliderStep}
+            labelStepSize={range}
+            labelRenderer={sliderLabelRenderer}
+          />
+        </FormGroup>
+      </Setting>
+    );
+  }
+);
+export const NumericSetting = SpinnerAndSliderNumericSetting; // for backward-compatibility
+
+/**
+ * A numeric setting that uses the native HTML number input. It may show the spinner,
+ * but will still allow entering arbitrary numbers.
+ */
+export const InputNumericSetting = view(
+  ({ setting, get, set, search, children }) => {
+    const { label, description, min, max, integer } = setting;
+
+    const value = get(setting);
+    const floorValueIfInteger = () => {
+      if (integer) {
+        set(setting, Math.floor(value));
+      }
+    };
+
+    return (
+      <Setting
+        className="InputNumericSetting"
+        label={label}
+        description={description}
+        labelSearchTarget={setting.labelSearchTarget}
+        search={search}
+      >
+        <FormGroup
+          inline={true}
           fill={false}
-          min={min}
-          max={max}
-          stepSize={inputStep}
-          minorStepSize={inputStep}
-          majorStepSize={inputStep}
-          clampValueOnBlur={true}
-        />
-        <Slider
-          value={v}
-          onChange={onSliderValueChange}
-          onRelease={doOnRelease}
-          fill={false}
-          min={min}
-          max={max}
-          stepSize={sliderStep}
-          labelStepSize={range}
-          labelRenderer={sliderLabelRenderer}
-        />
-      </FormGroup>
-    </Setting>
-  );
-});
+          className="NumericSettingControls"
+        >
+          <InputGroup
+            value={value}
+            type="number"
+            min={min}
+            max={max}
+            onBlur={floorValueIfInteger}
+            onChange={e => set(setting, e.target.value)}
+            fill={false}
+          />
+          {children}
+        </FormGroup>
+      </Setting>
+    );
+  }
+);

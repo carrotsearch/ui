@@ -32,3 +32,17 @@
 .NumericSettingSimple .bp3-numeric-input {
   margin-right: 1rem;
 }
+
+.InputNumericSetting input[type=number]::-webkit-inner-spin-button,
+.InputNumericSetting input[type=number]::-webkit-outer-spin-button {
+}
+
+.InputNumericSetting input[type=number]::-webkit-outer-spin-button,
+.InputNumericSetting input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: inner-spin-button !important;
+  width: 25px;
+  position: absolute;
+  top: 10%;
+  right: 0.25em;
+  height: 80%;
+}

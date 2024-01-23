@@ -7,7 +7,11 @@ import { Section } from "../Section.js";
 import { RadioSetting } from "./RadioSetting.js";
 import { BooleanSetting } from "./BooleanSetting.js";
 import { StringSetting } from "./StringSetting.js";
-import { NumericSetting, NumericSettingSimple } from "./NumericSetting.js";
+import {
+  InputNumericSetting,
+  SpinnerAndSliderNumericSetting,
+  SpinnerNumericSetting
+} from "./NumericSetting.js";
 import { SelectSetting } from "./SelectSetting.js";
 import { StringArraySetting } from "./StringArraySetting.js";
 import { FileSetting } from "./FileSetting.js";
@@ -168,10 +172,26 @@ const factories = {
   },
   number: (s, get, set, search) => {
     if (Number.isFinite(s.min) && Number.isFinite(s.max)) {
-      return <NumericSetting setting={s} get={get} set={set} search={search} />;
+      return (
+        <SpinnerAndSliderNumericSetting
+          setting={s}
+          get={get}
+          set={set}
+          search={search}
+        />
+      );
+    } else if (Number.isFinite(s.step)) {
+      return (
+        <SpinnerNumericSetting
+          setting={s}
+          get={get}
+          set={set}
+          search={search}
+        />
+      );
     } else {
       return (
-        <NumericSettingSimple setting={s} get={get} set={set} search={search} />
+        <InputNumericSetting setting={s} get={get} set={set} search={search} />
       );
     }
   },
