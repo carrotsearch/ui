@@ -26,7 +26,7 @@
 .PointedTabs > .bp3-tab-list > *:not(:last-child) {
   margin-right: 0.25em;
 }
-.PointedTabs > .bp3-tab-list > .TabGroupLabel {
+.PointedTabs > .bp3-tab-list > .bp3-tab + .TabGroupLabel {
   margin-left: 1em;
   margin-right: 0em;
   color: var(--text-color-lighter);
