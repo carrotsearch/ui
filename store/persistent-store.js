@@ -11,13 +11,15 @@ export const persistentStore = (key, defaults, methods) => {
     storage.set(key, backingStore);
   });
 
+  const resolvedDefaults = defaults instanceof Function ? defaults() : defaults;
+
   backingStore.resetToDefaults = () => {
     // Assume a flat object for now
     Object.keys(defaults).forEach(prop => {
-      backingStore[prop] = defaults[prop];
+      backingStore[prop] = resolvedDefaults[prop];
     });
   };
-  backingStore.getDefaults = () => defaults;
+  backingStore.getDefaults = () => resolvedDefaults;
 
   return backingStore;
 };
