@@ -45,3 +45,5 @@ export const persistentLruStore = (
   });
   return items;
 };
+
+export const clearAllPersistentState = () => storage.clear();
