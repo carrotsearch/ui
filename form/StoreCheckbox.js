@@ -7,7 +7,7 @@ export const StoreCheckbox = view(({ store, property, ...props }) => {
   return (
     <Checkbox
       {...props}
-      checked={store[property]}
+      checked={!!store[property]}
       onChange={e => (store[property] = e.target.checked)}
     />
   );
