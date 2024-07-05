@@ -8,9 +8,9 @@ export const reduceToSet = array =>
     return set;
   }, new Set());
 
-export const reduceToMap = (array, keyFn, valueFn = e => e) => {
-  return array.reduce((map, e) => {
-    map.set(keyFn(e), valueFn(e));
+export const reduceToMap = (array, keyFn, valueFn = (e, i) => e) => {
+  return array.reduce((map, e, i) => {
+    map.set(keyFn(e, i), valueFn(e, i));
     return map;
   }, new Map());
 };
