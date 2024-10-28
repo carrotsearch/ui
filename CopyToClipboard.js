@@ -13,7 +13,7 @@ const useCopy = contentProvider => {
   const timeout = useRef();
 
   const copy = async () => {
-    const content = contentProvider();
+    const content = await contentProvider();
 
     let success;
     try {
