@@ -67,6 +67,8 @@
 }
 
 .SettingDescriptionInline .SettingDescription {
+  max-width: none;
+  max-height: none;
   padding: calc(0.5 * var(--leading)) 0;
   font-weight: normal;
   font-size: 90%;
