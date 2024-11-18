@@ -1,11 +1,16 @@
-import React from "react";
+import React, { createContext, useContext } from "react";
 
 import "./Setting.css";
 
 import { FormGroup } from "@blueprintjs/core";
 import { VscQuestion } from "react-icons/vsc";
-import { DescriptionPopover } from "../DescriptionPopover.js";
+import {
+  DescriptionPopover,
+  SettingDescriptionInline
+} from "../DescriptionPopover.js";
 import { SearchHighlight } from "../fuzzysearch.js";
+
+export const SettingsConfig = createContext({ inlineDescription: true });
 
 export const LabelWithHelp = ({
   label,
@@ -13,6 +18,8 @@ export const LabelWithHelp = ({
   search,
   labelSearchTarget
 }) => {
+  const settingsConfig = useContext(SettingsConfig);
+
   if (description) {
     return (
       <div className="LabelWithHelp">
@@ -21,7 +28,11 @@ export const LabelWithHelp = ({
           target={labelSearchTarget}
           search={search}
         />
-        <SettingDescriptionPopover description={description} />
+        {settingsConfig.inlineDescription ? (
+          <SettingDescriptionInline description={description} />
+        ) : (
+          <SettingDescriptionPopover description={description} />
+        )}
       </div>
     );
   } else {

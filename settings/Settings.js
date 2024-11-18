@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import PropTypes from "prop-types";
 
 import { DeferredGroups, Group } from "./Group.js";
@@ -8,6 +8,7 @@ import { persistentStore } from "../store/persistent-store.js";
 export { addFactory } from "./Group.js";
 
 import { checkSearchMatch, prepareSearchTarget } from "../fuzzysearch.js";
+import { SettingsConfig } from "./Setting";
 
 export const Settings = ({
   settings,
@@ -15,26 +16,32 @@ export const Settings = ({
   set,
   defer = false,
   timeout,
-  search
-}) =>
-  defer ? (
-    <DeferredGroups
-      className="Settings"
-      setting={settings}
-      set={set}
-      get={get}
-      timeout={timeout}
-      search={search}
-    />
-  ) : (
-    <Group
-      className="Settings"
-      setting={settings}
-      set={set}
-      get={get}
-      search={search}
-    />
+  search,
+  inlineDescription = false
+}) => {
+  return (
+    <SettingsConfig.Provider value={{ inlineDescription: inlineDescription }}>
+      {defer ? (
+        <DeferredGroups
+          className="Settings"
+          setting={settings}
+          set={set}
+          get={get}
+          timeout={timeout}
+          search={search}
+        />
+      ) : (
+        <Group
+          className="Settings"
+          setting={settings}
+          set={set}
+          get={get}
+          search={search}
+        />
+      )}
+    </SettingsConfig.Provider>
   );
+};
 
 Settings.propTypes = {
   settings: PropTypes.object.isRequired

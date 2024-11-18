@@ -66,6 +66,13 @@
   margin: 0.5em 0;
 }
 
+.SettingDescriptionInline .SettingDescription {
+  padding: calc(0.5 * var(--leading)) 0;
+  font-weight: normal;
+  font-size: 90%;
+  color: var(--text-color-lighter);
+}
+
 .Settings .hl {
   background-color: var(--search-highlight-background-color);
   border-bottom: 2px solid var(--search-highlight-border-color);

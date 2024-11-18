@@ -28,6 +28,14 @@ export const DescriptionPopover = ({ description, children }) => {
   );
 };
 
+export const SettingDescriptionInline = ({ description }) => {
+  return (
+    <div className="SettingDescriptionInline">
+      <Description description={description} />
+    </div>
+  );
+};
+
 const Description = ({ description }) => {
   return typeof description === "string" ? (
     <div
@@ -35,6 +43,8 @@ const Description = ({ description }) => {
       dangerouslySetInnerHTML={{ __html: description }}
     />
   ) : (
-    <div className="SettingDescription">{description}</div>
+    <div className="SettingDescription">
+      {Array.isArray(description) ? description.join(" ") : description}
+    </div>
   );
 };
